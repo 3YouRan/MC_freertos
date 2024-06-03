@@ -6,9 +6,10 @@ extern uint8_t RxBuffer[1];//串口接收缓冲
 extern uint8_t DataBuff[200];//指令内容
 extern PID pid_speed_A;
 extern PID pid_position_A;
+extern PID pid_angle;
 float Target_Speed;
 float Target_Position;
-
+float Target_Angle;
 
 /*
  * 解析出DataBuff中的数据
@@ -65,11 +66,11 @@ void USART_PID_Adjust(uint8_t Motor_n)
     if(Motor_n == 1)//左边电机
     {
         if(DataBuff[0]=='P' && DataBuff[1]=='1') // 位置环P
-            pid_position_A.kp = data_Get;
+            pid_angle.kp = data_Get;
         else if(DataBuff[0]=='I' && DataBuff[1]=='1') // 位置环I
-            pid_position_A.ki = data_Get;
+            pid_angle.ki = data_Get;
         else if(DataBuff[0]=='D' && DataBuff[1]=='1') // 位置环D
-            pid_position_A.kd = data_Get;
+            pid_angle.kd = data_Get;
         else if(DataBuff[0]=='P' && DataBuff[1]=='2') // 速度环P
             pid_speed_A.kp = data_Get;
         else if(DataBuff[0]=='I' && DataBuff[1]=='2') // 速度环I
@@ -79,7 +80,7 @@ void USART_PID_Adjust(uint8_t Motor_n)
         else if((DataBuff[0]=='S' && DataBuff[1]=='p') && DataBuff[2]=='e') //目标速度
             Target_Speed = data_Get;
         else if((DataBuff[0]=='P' && DataBuff[1]=='o') && DataBuff[2]=='s') //目标位置
-            Target_Position = data_Get*360;
+            Target_Angle = data_Get;
 
     }
 //    else if(Motor_n == 0) // 右边电机

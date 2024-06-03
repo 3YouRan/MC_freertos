@@ -33,6 +33,8 @@
 #include "Buzzer.h"
 #include "PID_Control.h"
 #include "PS2.h"
+#include "im948_CMD.h"
+#include "bsp_usart.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -82,12 +84,21 @@ float Target_Speed_D_Now=0;
 uint16_t RxLine = 0;//鎸囦护闀垮害
 uint8_t RxBuffer[1];//涓插彛鎺ユ敹缂撳啿
 uint8_t DataBuff[200];//鎸囦护鍐呭
-
+//陀螺仪数据
+extern U8 Data[9];
+extern U16 MASK[16];
+extern U16 Handkey;
+extern struct_Ram_Uart Uart;
+uint8_t rx_byte;
+float angle_Car=0;
+//循迹数组
+uint8_t sensor[4];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 void MX_FREERTOS_Init(void);
+
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -148,8 +159,9 @@ int main(void)
   HAL_TIM_PWM_Start(&htim9,TIM_CHANNEL_2);
   HAL_TIM_PWM_Start(&htim10,TIM_CHANNEL_1);
   HAL_TIM_PWM_Start(&htim11,TIM_CHANNEL_1);
-  RetargetInit(&huart6);
-  HAL_UART_Receive_IT(&huart6, (uint8_t *)RxBuffer, 1);   // 启动UART接收中断
+  RetargetInit(&huart2);
+  HAL_UART_Receive_IT(&huart2, (uint8_t *)RxBuffer, 1);   // 启动UART接收中断
+  HAL_UART_Receive_IT(&huart6, &rx_byte, 1);   // 启动UART接收中断
 
   /* USER CODE END 2 */
 
@@ -171,10 +183,6 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-//      HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
-//      HAL_Delay(100);
-//      printf("A\n");
-//      Buzzer_On();
   }
   /* USER CODE END 3 */
 }
@@ -228,8 +236,23 @@ void SystemClock_Config(void)
 // UART接收完成回调函数
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
+    if (huart == &huart6) {
+        // 处理接收到的数据
 
-    if (huart->Instance == USART6) {
+        if (FifoSize > Uart.UartFifo.Cnt)
+        {
+            Uart.UartFifo.RxBuf[Uart.UartFifo.In] = rx_byte;
+            if(++Uart.UartFifo.In >= FifoSize)
+            {
+                Uart.UartFifo.In = 0;
+            }
+            ++Uart.UartFifo.Cnt;
+        }
+
+        // 重新启用接收中断，以便继续接收数??
+        HAL_UART_Receive_IT(&huart6, &rx_byte, 1);
+    }
+    if (huart->Instance == USART2) {
 
         RxLine++;                            // 接收行数加1
         DataBuff[RxLine-1]=RxBuffer[0];       // 将接收到的数据存入缓冲区
@@ -245,9 +268,14 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
         }
         RxBuffer[0]=0;                        // 重置接收缓冲区
 
-        HAL_UART_Receive_IT(&huart6, (uint8_t *)RxBuffer, 1);   // 重新启动UART接收中断
+        HAL_UART_Receive_IT(&huart2, (uint8_t *)RxBuffer, 1);   // 重新启动UART接收中断
     }
 }
+int times1=0;
+short encoder_now1=0;
+short encoder_now2=0;
+short encoder_now3=0;
+short encoder_now4=0;
 /* USER CODE END 4 */
 
 /**
@@ -258,8 +286,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
   * @param  htim : TIM handle
   * @retval None
   */
-static int times1=0;
-static short encoder_now1,encoder_now2,encoder_now3,encoder_now4;
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
   /* USER CODE BEGIN Callback 0 */
@@ -307,15 +333,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
                 Target_Speed_D_Now-=Target_Speed_Inc;
             }
 
-            INC_PID_Realize(&pid_speed_A, Target_Speed_A_Now, motorA.speed);
-            INC_PID_Realize(&pid_speed_B, -Target_Speed_B_Now, motorB.speed);
-            INC_PID_Realize(&pid_speed_C, Target_Speed_C_Now, motorC.speed);
-            INC_PID_Realize(&pid_speed_D, -Target_Speed_D_Now, motorD.speed);
 
-            motorA_run(pid_speed_A.output);
-            motorB_run(pid_speed_B.output);
-            motorC_run(pid_speed_C.output);
-            motorD_run(pid_speed_D.output);
         }
     }
   /* USER CODE END Callback 0 */

@@ -33,6 +33,8 @@
 #include "PS2.h"
 #include "queue.h"
 #include "timers.h"
+#include "im948_CMD.h"
+#include "bsp_usart.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -61,6 +63,8 @@ extern uint8_t Key1;
 TaskHandle_t g_xUart6TaskHandle;//串口6打印任务句柄
 TaskHandle_t g_xBaseControlTaskHandle;//底盘控制任务句柄
 TaskHandle_t g_xPS2TaskHandle; //PS2任务句柄
+TaskHandle_t g_xIM600TaskHandle; //陀螺仪任务句柄
+TaskHandle_t g_xPIDTaskHandle; //陀螺仪任务句柄
 
 QueueHandle_t g_xPS2QueueHandle; //PS2手柄队列句柄
 
@@ -81,6 +85,7 @@ const osThreadAttr_t defaultTask_attributes = {
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
 void UART6_Task(void *argument);
+void IM600_Task(void *argument);
 /* USER CODE END FunctionPrototypes */
 
 void StartDefaultTask(void *argument);
@@ -94,10 +99,13 @@ void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
   */
 void MX_FREERTOS_Init(void) {
   /* USER CODE BEGIN Init */
-  RetargetInit(&huart6);
+
   motor_init();
   PID_Init();
-
+    Cmd_03();//唤醒传感??
+    Cmd_12(5, 255, 0,  0, 3, 100, 2, 4, 9, 0x40);//设置IM600设备参数
+    Cmd_05();// 归零IM600Z轴姿态角数据，以小车复位时的姿???角为角??0??
+    Cmd_19();// ??启数据主动上??
   /* USER CODE END Init */
 
   /* USER CODE BEGIN RTOS_MUTEX */
@@ -128,7 +136,9 @@ void MX_FREERTOS_Init(void) {
   xTaskCreate(UART6_Task,"UART6_Task",128,NULL,osPriorityNormal,&g_xUart6TaskHandle);
   xTaskCreate(Base_Control,"Base_Control",128,NULL,osPriorityNormal,&g_xBaseControlTaskHandle);
   xTaskCreate(PS2_Task,"PS2_Task",128,NULL,osPriorityNormal,&g_xPS2TaskHandle);
-//  xTimerStart(g_xTimerPIDHandle,0);
+  xTaskCreate(IM600_Task,"IM600_Task",128,NULL,osPriorityNormal,&g_xIM600TaskHandle);
+  xTaskCreate(PID_Task,"PID_Task",128,NULL,osPriorityNormal+1,&g_xPIDTaskHandle);
+  //  xTimerStart(g_xTimerPIDHandle,0);
   /* USER CODE END RTOS_THREADS */
 
   /* USER CODE BEGIN RTOS_EVENTS */
@@ -158,12 +168,44 @@ void StartDefaultTask(void *argument)
 /* Private application code --------------------------------------------------*/
 /* USER CODE BEGIN Application */
 extern float Target_Speed_Now;
+extern float Target_Angle;
+extern float angle_Car;
+extern PID pid_angle;
+extern float angle_speed;
+extern float angle_Car_total;
+extern uint8_t sensor[4];
 void UART6_Task(void *argument){
     while(1){
-        printf("UART6:%.2f,%.2f,%.2f,%.2f,%.2f,%d\n\r",pid_speed_A.kp,pid_speed_A.kd,Target_Speed_Now,motorA.speed,Target_Speed,Key1);
+//        printf("UART2:%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%d\n\r",pid_angle.kp,pid_angle.output,Target_Angle,motorA.speed,angle_Car_total,angle_speed,Key1);
         vTaskDelay(55);
+        printf("UART2:%d,%d,%d,%d\r\n",sensor[0],sensor[1],sensor[2],sensor[3]);
     }
 }
+extern u8 Data[9];
+extern u16 MASK[16];
+extern u16 Handkey;
+extern struct_Ram_Uart Uart;
+float angle_total=0;
+extern float angle_Car;
 
+void IM600_Task(void *argument){
+    uint8_t rxByte;
+    while(1){
+        while (Uart.UartFifo.Cnt > 0)
+        {// 从fifo获取串口发来的数据
+
+            rxByte = Uart.UartFifo.RxBuf[Uart.UartFifo.Out];
+            if (++Uart.UartFifo.Out >= FifoSize)
+            {
+                Uart.UartFifo.Out = 0;
+            }
+            __disable_irq();
+            --Uart.UartFifo.Cnt;
+            __enable_irq();
+            //每收到1字节数据都填入该函数，当抓取到有效的数据包就会回调进入Cmd_RxUnpack(U8 *buf, U8 DLen) 函数处理
+            Cmd_GetPkt(rxByte);
+        }
+    }
+}
 /* USER CODE END Application */
 

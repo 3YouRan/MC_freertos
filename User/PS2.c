@@ -266,9 +266,7 @@ void PS2_Task(void *argment){
     while(1){
         PS2_ReadData();          //获取数据
         Key1 = PS2_DataKey();       //获取手柄按键数据
-//        printf("UART6:%d,%.2f\n\r",Key1,Target_Speed);
-
-        PS2_ClearData();      //清除手柄按键数据数据
+        PS2_ClearData();      //清除手柄按键数据
         vTaskDelay(20);
     }
 }
