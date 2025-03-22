@@ -7,7 +7,7 @@
       4、增加 设置静止节能模式的触发时长
 *******************************************************************************/
 #include "im948_CMD.h"
-#include "bsp_usart.h"
+#include "../BSP/bsp_usart.h"
 extern float X_Car;
 extern float Y_Car;
 float angle_Car_last=0;

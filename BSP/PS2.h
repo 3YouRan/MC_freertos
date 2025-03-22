@@ -20,11 +20,10 @@ History:
 V1.0: 	2015/05/16
 1、手柄解码，识别按键值，读取模拟值。
 **********************************************************/
-#include <stdio.h>
-#include <stdlib.h>
+
 #include "main.h"
 #include "gpio.h"
-
+#include "all.h"
 typedef uint16_t u16;
 typedef uint8_t u8;
 
@@ -72,9 +71,7 @@ void delay_us(uint32_t us);
 #define PSS_LX 7
 #define PSS_LY 8
 
-extern u8 Data[9];
-extern u16 MASK[16];
-extern u16 Handkey;
+
 
 void PS2_Init(void);
 u8 PS2_RedLight(void);   //判断是否为红灯模式

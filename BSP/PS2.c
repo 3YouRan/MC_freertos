@@ -2,12 +2,7 @@
 // Created by 陈瑜 on 2024-02-15.
 //
 
-#include "PS2.h"
-#include "usart.h"
-#include "gpio.h"
-#include "FreeRTOS.h"
-#include "task.h"
-#include "queue.h"
+#include "all.h"
 /*********************************************************
 File：PS2驱动程序
 Author：pinggai    Version:1.0     Data:2015/05/16
@@ -22,8 +17,7 @@ u16 Handkey;
 u8 Comd[2]={0x01,0x42};	//开始命令。请求数据
 u8 Data[9]={0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00}; //数据存储数组
 
-extern QueueHandle_t g_xPS2QueueHandle; //PS2手柄队列句柄
-extern float Target_Speed;
+
 
 void delay_us(uint32_t us)
 {
@@ -259,14 +253,4 @@ void PS2_SetInit(void)
     PS2_TurnOnAnalogMode();	//“红绿灯”配置模式，并选择是否保存
     PS2_VibrationMode();	//开启震动模式
     PS2_ExitConfing();		//完成并保存配置
-}
-//PS2手柄任务
-void PS2_Task(void *argment){
-
-    while(1){
-        PS2_ReadData();          //获取数据
-        Key1 = PS2_DataKey();       //获取手柄按键数据
-        PS2_ClearData();      //清除手柄按键数据
-        vTaskDelay(20);
-    }
 }

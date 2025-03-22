@@ -25,16 +25,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "event_groups.h"
-#include "usart.h"
-#include "retarget.h"
-#include "driver_motor.h"
-#include "PID_Control.h"
-#include "PS2.h"
-#include "queue.h"
-#include "timers.h"
-#include "im948_CMD.h"
-#include "bsp_usart.h"
+#include "all.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -167,45 +158,9 @@ void StartDefaultTask(void *argument)
 
 /* Private application code --------------------------------------------------*/
 /* USER CODE BEGIN Application */
-extern float Target_Speed_Now;
-extern float Target_Angle;
-extern float angle_Car;
-extern PID pid_angle;
-extern float angle_speed;
-extern float angle_Car_total;
-extern uint8_t sensor[4];
-void UART6_Task(void *argument){
-    while(1){
-//        printf("UART2:%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%d\n\r",pid_angle.kp,pid_angle.output,Target_Angle,motorA.speed,angle_Car_total,angle_speed,Key1);
-        vTaskDelay(55);
-        printf("UART2:%d,%d,%d,%d\r\n",sensor[0],sensor[1],sensor[2],sensor[3]);
-    }
-}
-extern u8 Data[9];
-extern u16 MASK[16];
-extern u16 Handkey;
-extern struct_Ram_Uart Uart;
-float angle_total=0;
-extern float angle_Car;
 
-void IM600_Task(void *argument){
-    uint8_t rxByte;
-    while(1){
-        while (Uart.UartFifo.Cnt > 0)
-        {// 从fifo获取串口发来的数据
 
-            rxByte = Uart.UartFifo.RxBuf[Uart.UartFifo.Out];
-            if (++Uart.UartFifo.Out >= FifoSize)
-            {
-                Uart.UartFifo.Out = 0;
-            }
-            __disable_irq();
-            --Uart.UartFifo.Cnt;
-            __enable_irq();
-            //每收到1字节数据都填入该函数，当抓取到有效的数据包就会回调进入Cmd_RxUnpack(U8 *buf, U8 DLen) 函数处理
-            Cmd_GetPkt(rxByte);
-        }
-    }
-}
+
+
 /* USER CODE END Application */
 

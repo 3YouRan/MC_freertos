@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/BSP/PS2.c" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/BSP/PS2.c" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/BSP/PS2.h" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/BSP/PS2.h" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/BSP/bsp_usart.c" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/BSP/bsp_usart.c" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/BSP/bsp_usart.h" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/BSP/bsp_usart.h" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/BSP/im948_CMD.c" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/BSP/im948_CMD.c" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/BSP/im948_CMD.h" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/BSP/im948_CMD.h" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Controller/PID_Control.c" charset="GBK" />
     <file url="file://$PROJECT_DIR$/Core/Src/freertos.c" charset="GBK" />
     <file url="file://$PROJECT_DIR$/Core/Src/main.c" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/User/PID_Control.c" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/User/PS2.c" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/User/PS2.h" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/User/bsp_usart.c" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/User/bsp_usart.h" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/User/im948_CMD.c" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/User/im948_CMD.h" charset="UTF-8" />
     <file url="PROJECT" charset="GBK" />
   </component>
 </project>

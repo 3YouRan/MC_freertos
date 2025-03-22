@@ -33,6 +33,6 @@ void PID_Init();
 void Base_Control(void *argument);
 float INC_PID_Realize(PID* pid,float target,float feedback);//一次PID计算
 float FULL_PID_Realize(PID* pid,float target,float feedback);//一次PID计算
-void PID_Timer_Callback(TimerHandle_t pxTimer );
-void PID_Task(void *argument);
+
+
 #endif //MC_PROJ_PID_CONTROL_H
