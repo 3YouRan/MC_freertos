@@ -51,15 +51,17 @@ extern float Target_Speed;
 extern float Target_Position;
 extern uint8_t Key1;
 
-TaskHandle_t g_xUart6TaskHandle;//´®¿Ú6´òÓ¡ÈÎÎñ¾ä±ú
-TaskHandle_t g_xBaseControlTaskHandle;//µ×ÅÌ¿ØÖÆÈÎÎñ¾ä±ú
-TaskHandle_t g_xPS2TaskHandle; //PS2ÈÎÎñ¾ä±ú
-TaskHandle_t g_xIM600TaskHandle; //ÍÓÂÝÒÇÈÎÎñ¾ä±ú
-TaskHandle_t g_xPIDTaskHandle; //ÍÓÂÝÒÇÈÎÎñ¾ä±ú
+TaskHandle_t g_xUart6TaskHandle;//ï¿½ï¿½ï¿½ï¿½6ï¿½ï¿½Ó¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+TaskHandle_t g_xBaseControlTaskHandle;//ï¿½ï¿½ï¿½Ì¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+TaskHandle_t g_xPS2TaskHandle; //PS2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+TaskHandle_t g_xIM600TaskHandle; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+TaskHandle_t g_xPIDTaskHandle; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+TaskHandle_t g_xOLEDTaskHandle; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-QueueHandle_t g_xPS2QueueHandle; //PS2ÊÖ±ú¶ÓÁÐ¾ä±ú
 
-//Èí¼þ¶¨Ê±Æ÷¾ä±ú
+QueueHandle_t g_xPS2QueueHandle; //PS2ï¿½Ö±ï¿½ï¿½ï¿½ï¿½Ð¾ï¿½ï¿½
+
+//ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½
 TimerHandle_t g_xTimerPIDHandle;
 
 
@@ -91,12 +93,6 @@ void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 void MX_FREERTOS_Init(void) {
   /* USER CODE BEGIN Init */
 
-  motor_init();
-  PID_Init();
-    Cmd_03();//»½ÐÑ´«¸Ð??
-    Cmd_12(5, 255, 0,  0, 3, 100, 2, 4, 9, 0x40);//ÉèÖÃIM600Éè±¸²ÎÊý
-    Cmd_05();// ¹éÁãIM600ZÖá×ËÌ¬½ÇÊý¾Ý£¬ÒÔÐ¡³µ¸´Î»Ê±µÄ×Ë???½ÇÎª½Ç??0??
-    Cmd_19();// ??ÆôÊý¾ÝÖ÷¶¯ÉÏ??
   /* USER CODE END Init */
 
   /* USER CODE BEGIN RTOS_MUTEX */
@@ -128,8 +124,10 @@ void MX_FREERTOS_Init(void) {
   xTaskCreate(Base_Control,"Base_Control",128,NULL,osPriorityNormal,&g_xBaseControlTaskHandle);
   xTaskCreate(PS2_Task,"PS2_Task",128,NULL,osPriorityNormal,&g_xPS2TaskHandle);
   xTaskCreate(IM600_Task,"IM600_Task",128,NULL,osPriorityNormal,&g_xIM600TaskHandle);
-  xTaskCreate(PID_Task,"PID_Task",128,NULL,osPriorityNormal+1,&g_xPIDTaskHandle);
-  //  xTimerStart(g_xTimerPIDHandle,0);
+  xTaskCreate(PID_Task,"PID_Task",128,NULL,osPriorityNormal+5,&g_xPIDTaskHandle);
+  xTaskCreate(OLED_Task,"OLED_Task",128,NULL,osPriorityNormal,&g_xOLEDTaskHandle);
+
+    //  xTimerStart(g_xTimerPIDHandle,0);
   /* USER CODE END RTOS_THREADS */
 
   /* USER CODE BEGIN RTOS_EVENTS */

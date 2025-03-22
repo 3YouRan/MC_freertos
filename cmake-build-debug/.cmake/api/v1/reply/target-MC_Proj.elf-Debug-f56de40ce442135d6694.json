@@ -194,18 +194,6 @@
 				},
 				{
 					"backtrace" : 13,
-					"path" : "D:/STM32/proj/MC_Proj/BSP"
-				},
-				{
-					"backtrace" : 13,
-					"path" : "D:/STM32/proj/MC_Proj/Controller"
-				},
-				{
-					"backtrace" : 13,
-					"path" : "D:/STM32/proj/MC_Proj/Application"
-				},
-				{
-					"backtrace" : 13,
 					"path" : "D:/STM32/proj/MC_Proj/Drivers/STM32F4xx_HAL_Driver/Inc"
 				},
 				{
@@ -235,6 +223,18 @@
 				{
 					"backtrace" : 13,
 					"path" : "D:/STM32/proj/MC_Proj/User"
+				},
+				{
+					"backtrace" : 13,
+					"path" : "D:/STM32/proj/MC_Proj/BSP"
+				},
+				{
+					"backtrace" : 13,
+					"path" : "D:/STM32/proj/MC_Proj/Application"
+				},
+				{
+					"backtrace" : 13,
+					"path" : "D:/STM32/proj/MC_Proj/Controller"
 				}
 			],
 			"language" : "C",
@@ -261,46 +261,53 @@
 				20,
 				22,
 				24,
-				33,
-				34,
-				35,
-				36,
-				37,
-				38,
+				26,
+				28,
 				39,
 				40,
 				41,
 				42,
 				43,
-				111,
-				112,
-				113,
-				114,
-				115,
-				116,
-				117,
-				118,
-				119,
-				120,
-				121,
+				44,
+				45,
+				46,
+				47,
+				48,
+				49,
+				50,
+				51,
 				122,
 				123,
 				124,
 				125,
 				126,
+				127,
 				128,
+				129,
+				130,
+				131,
 				132,
 				133,
-				152,
-				153,
-				155,
-				156,
-				157,
-				158,
-				159,
-				160,
-				161,
-				162
+				134,
+				135,
+				136,
+				137,
+				138,
+				139,
+				140,
+				142,
+				146,
+				147,
+				166,
+				167,
+				169,
+				170,
+				171,
+				172,
+				173,
+				174,
+				175,
+				176
 			]
 		},
 		{
@@ -397,18 +404,6 @@
 				},
 				{
 					"backtrace" : 13,
-					"path" : "D:/STM32/proj/MC_Proj/BSP"
-				},
-				{
-					"backtrace" : 13,
-					"path" : "D:/STM32/proj/MC_Proj/Controller"
-				},
-				{
-					"backtrace" : 13,
-					"path" : "D:/STM32/proj/MC_Proj/Application"
-				},
-				{
-					"backtrace" : 13,
 					"path" : "D:/STM32/proj/MC_Proj/Drivers/STM32F4xx_HAL_Driver/Inc"
 				},
 				{
@@ -438,12 +433,24 @@
 				{
 					"backtrace" : 13,
 					"path" : "D:/STM32/proj/MC_Proj/User"
+				},
+				{
+					"backtrace" : 13,
+					"path" : "D:/STM32/proj/MC_Proj/BSP"
+				},
+				{
+					"backtrace" : 13,
+					"path" : "D:/STM32/proj/MC_Proj/Application"
+				},
+				{
+					"backtrace" : 13,
+					"path" : "D:/STM32/proj/MC_Proj/Controller"
 				}
 			],
 			"language" : "ASM",
 			"sourceIndexes" : 
 			[
-				44
+				52
 			]
 		}
 	],
@@ -529,46 +536,53 @@
 				20,
 				22,
 				24,
-				33,
-				34,
-				35,
-				36,
-				37,
-				38,
+				26,
+				28,
 				39,
 				40,
 				41,
 				42,
 				43,
-				111,
-				112,
-				113,
-				114,
-				115,
-				116,
-				117,
-				118,
-				119,
-				120,
-				121,
+				44,
+				45,
+				46,
+				47,
+				48,
+				49,
+				50,
+				51,
 				122,
 				123,
 				124,
 				125,
 				126,
+				127,
 				128,
+				129,
+				130,
+				131,
 				132,
 				133,
-				152,
-				153,
-				155,
-				156,
-				157,
-				158,
-				159,
-				160,
-				161,
-				162
+				134,
+				135,
+				136,
+				137,
+				138,
+				139,
+				140,
+				142,
+				146,
+				147,
+				166,
+				167,
+				169,
+				170,
+				171,
+				172,
+				173,
+				174,
+				175,
+				176
 			]
 		},
 		{
@@ -588,24 +602,20 @@
 				21,
 				23,
 				25,
-				26,
 				27,
-				28,
 				29,
 				30,
 				31,
 				32,
-				45,
-				46,
-				47,
-				49,
-				50,
-				51,
-				52,
+				33,
+				34,
+				35,
+				36,
+				37,
+				38,
 				53,
 				54,
 				55,
-				56,
 				57,
 				58,
 				59,
@@ -628,6 +638,7 @@
 				76,
 				77,
 				78,
+				79,
 				80,
 				81,
 				82,
@@ -635,7 +646,6 @@
 				84,
 				85,
 				86,
-				87,
 				88,
 				89,
 				90,
@@ -658,42 +668,53 @@
 				107,
 				108,
 				109,
-				127,
-				129,
-				130,
-				131,
-				134,
-				135,
-				136,
-				137,
-				138,
-				139,
-				140,
+				110,
+				111,
+				112,
+				113,
+				114,
+				115,
+				116,
+				117,
+				118,
+				119,
+				120,
 				141,
-				142,
 				143,
 				144,
 				145,
-				146,
-				147,
 				148,
 				149,
 				150,
 				151,
+				152,
+				153,
 				154,
+				155,
+				156,
+				157,
+				158,
+				159,
+				160,
+				161,
+				162,
 				163,
-				164
+				164,
+				165,
+				168,
+				177,
+				178
 			]
 		},
 		{
 			"name" : "",
 			"sourceIndexes" : 
 			[
-				44,
-				48,
-				79,
-				110,
-				165
+				52,
+				56,
+				87,
+				121,
+				179
 			]
 		}
 	],
@@ -730,6 +751,17 @@
 		{
 			"backtrace" : 1,
 			"path" : "Application/imu_task.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Application/oled_task.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "Application/oled_task.h",
 			"sourceGroupIndex" : 1
 		},
 		{
@@ -812,6 +844,17 @@
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
+			"path" : "BSP/oled.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "BSP/oled.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
 			"path" : "BSP/retarget.c",
 			"sourceGroupIndex" : 0
 		},
@@ -849,6 +892,16 @@
 		},
 		{
 			"backtrace" : 1,
+			"path" : "Core/Inc/adc.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "Core/Inc/dma.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
 			"path" : "Core/Inc/gpio.h",
 			"sourceGroupIndex" : 1
 		},
@@ -876,6 +929,18 @@
 			"backtrace" : 1,
 			"path" : "Core/Inc/usart.h",
 			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Core/Src/adc.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Core/Src/dma.c",
+			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
@@ -1136,6 +1201,16 @@
 		},
 		{
 			"backtrace" : 1,
+			"path" : "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_adc_ex.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
 			"path" : "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h",
 			"sourceGroupIndex" : 1
 		},
@@ -1221,6 +1296,11 @@
 		},
 		{
 			"backtrace" : 1,
+			"path" : "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_adc.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
 			"path" : "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_bus.h",
 			"sourceGroupIndex" : 1
 		},
@@ -1283,6 +1363,18 @@
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
 			"path" : "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc_ex.c",
 			"sourceGroupIndex" : 0
 		},
 		{
@@ -1373,6 +1465,12 @@
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
 			"path" : "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_adc.c",
 			"sourceGroupIndex" : 0
 		},
 		{

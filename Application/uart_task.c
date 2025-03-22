@@ -4,10 +4,18 @@
 
 
 #include "all.h"
+
+extern uint8_t V_A[5];
+extern uint8_t V_B[5];
+extern uint8_t V_C[5];
+extern uint8_t V_D[5];
 void UART6_Task(void *argument){
     while(1){
-        printf("UART2:%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%d\n\r",pid_angle.kp,pid_angle.output,Target_Angle,motorA.speed,angle_Car_total,angle_speed,Key1);
+//        printf("UART6:%d,%d,%d,%d,%.2f,%.2f\r\n",L_TICK[0],L_TICK[1],R_TICK[0],R_TICK[1],Vx,Vy);
         vTaskDelay(55);
-//        printf("Angle:%.2f\r\n",92.33);
+        printf("1:%d,%d,%d,%d,%.5f\r\n",V_A[0],V_A[1],V_A[2],V_A[3],ADC_Value[0]/4096.0*5*11);
+//        printf("UART6:%.2f,%.2f,%.2f,%.2f\r\n",Target_Speed_A_Now,Target_Speed_B_Now,Target_Speed_C_Now,Target_Speed_D_Now);
+//          printf("UART6:%d,%d,%d,%d\r\n",(int16_t)motorA.speed,(int16_t)motorB.speed,(int16_t)motorC.speed,(int16_t)motorD.speed);
+//        printf("Angle:%.2f\r\n",angle_speed);
     }
 }

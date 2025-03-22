@@ -19,6 +19,8 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "cmsis_os.h"
+#include "adc.h"
+#include "dma.h"
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
@@ -59,21 +61,20 @@ float Target_Speed_A_Now=0;
 float Target_Speed_B_Now=0;
 float Target_Speed_C_Now=0;
 float Target_Speed_D_Now=0;
-//´®¿Ú6½ÓÊÕ»º³åÇø
+//ï¿½ï¿½ï¿½ï¿½6ï¿½ï¿½ï¿½Õ»ï¿½ï¿½ï¿½ï¿½ï¿½
 uint16_t RxLine = 0;//æŒ‡ä»¤é•¿åº¦
 uint8_t RxBuffer[1];//ä¸²å£æ¥æ”¶ç¼“å†²
 uint8_t DataBuff[200];//æŒ‡ä»¤å†…å®¹
 
 uint8_t rx_byte;
 float angle_Car=0;
-//Ñ­¼£Êı×é
+//Ñ­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 uint8_t sensor[4];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 void MX_FREERTOS_Init(void);
-
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -112,6 +113,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_TIM1_Init();
   MX_TIM2_Init();
   MX_TIM3_Init();
@@ -123,6 +125,7 @@ int main(void)
   MX_USART2_UART_Init();
   MX_USART6_UART_Init();
   MX_TIM6_Init();
+  MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
   my_init();
 
@@ -197,6 +200,16 @@ void SystemClock_Config(void)
 
 /* USER CODE BEGIN 4 */
 
+/* USER CODE END 4 */
+
+/**
+  * @brief  Period elapsed callback in non blocking mode
+  * @note   This function is called  when TIM7 interrupt took place, inside
+  * HAL_TIM_IRQHandler(). It makes a direct call to HAL_IncTick() to increment
+  * a global variable "uwTick" used as application time base.
+  * @param  htim : TIM handle
+  * @retval None
+  */
 
 /**
   * @brief  This function is executed in case of error occurrence.

@@ -47,6 +47,9 @@ void motorA_run(int speed){
     else if (speed<0){
         PWMA1_SET(-speed);
         PWMA2_SET(0);
+    }else{
+        PWMA1_SET(0);
+        PWMA2_SET(0);
     }
 }
 void motorB_run(int speed){
@@ -59,6 +62,9 @@ void motorB_run(int speed){
     else if (speed<0){
         PWMB1_SET(0);
         PWMB2_SET(-speed);
+    }else{
+        PWMB1_SET(0);
+        PWMB2_SET(0);
     }
 
 }
@@ -72,6 +78,9 @@ void motorC_run(int speed){
     else if (speed<0){
         PWMC1_SET(0);
         PWMC2_SET(-speed);
+    }else{
+        PWMC1_SET(0);
+        PWMC2_SET(0);
     }
 }
 void motorD_run(int speed){
@@ -81,6 +90,9 @@ void motorD_run(int speed){
     }
     else if (speed<0){
        PWMD1_SET(-speed);
+        PWMD2_SET(0);
+    }else{
+        PWMD1_SET(0);
         PWMD2_SET(0);
     }
 }
