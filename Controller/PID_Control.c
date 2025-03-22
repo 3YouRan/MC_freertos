@@ -3,7 +3,8 @@
 //
 
 #include "PID_Control.h"
-
+#include "FreeRTOS.h"
+#include "task.h"
 //PID结构体
 PID pid_speed_A;
 PID pid_position_A;
@@ -16,6 +17,8 @@ PID pid_position_C;
 
 PID pid_speed_D;
 PID pid_position_D;
+
+PID pid_angle;
 
 extern float Target_Speed;
 extern float Target_Position;
@@ -66,6 +69,17 @@ void PID_Init(){
     pid_speed_D.ki = 0;
     pid_speed_D.kd = 12;
     pid_speed_D.deadZone = 0.01;
+
+    pid_angle.err = 0;
+    pid_angle.integral = 0;
+    pid_angle.maxIntegral = 5000;
+    pid_angle.maxOutput=1000;
+    pid_angle.lastErr = 0;
+    pid_angle.output = 0;
+    pid_angle.kp = 10;
+    pid_angle.ki = 0;
+    pid_angle.kd = 0;
+    pid_angle.deadZone = 0.01;
 }
 /****************************************
  * 作用：增量式PID
@@ -123,81 +137,32 @@ float FULL_PID_Realize(PID* pid,float target,float feedback)//一次PID计算
     pid->output = (pid->kp * pid->err) + (pid->ki * pid->integral)
                    + (pid->kd * (pid->err - pid->lastErr));//全量式PID
 
-    //输出限幅
-    if(target >= 0)//正转时
-    {
-        if(pid->output < 0) pid->output = 0;
-        else if(pid->output > pid->maxOutput) pid->output = pid->maxOutput;
-    }
-    else if(target < 0)//反转时
-    {
-        if(pid->output < -pid->maxOutput) pid->output = -pid->maxOutput;
-        else if(pid->output > 0) pid->output = 0;
-    }
+//    //输出限幅
+//    if(target >= 0)//正转时
+//    {
+//        if(pid->output < 0) pid->output = 0;
+//        else if(pid->output > pid->maxOutput) pid->output = pid->maxOutput;
+//    }
+//    else if(target < 0)//反转时
+//    {
+//        if(pid->output < -pid->maxOutput) pid->output = -pid->maxOutput;
+//        else if(pid->output > 0) pid->output = 0;
+//    }
 
     pid->lastErr = pid->err;
-    if(target == 0) pid->output = 0; // 刹车时直接输出0
+//    if(target == 0) pid->output = 0; // 刹车时直接输出0
     return pid->output;
 
 }
-extern uint8_t Key1;
-extern float Target_Speed_A;
-extern float Target_Speed_B;
-extern float Target_Speed_C;
-extern float Target_Speed_D;
-extern float Target_Speed_A_Now;
-extern float Target_Speed_B_Now;
-extern float Target_Speed_C_Now;
-extern float Target_Speed_D_Now;
 
-uint8_t direction ;
-void Base_Control(void *argument){
+void LED_Trun_right(void){//右转向灯
+    HAL_GPIO_WritePin(LED_R_GPIO_Port, LED_R_Pin, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(LED_L_GPIO_Port, LED_L_Pin, GPIO_PIN_SET);
 
-    while(1){
-
-        switch (Key1) {
-            case 5:direction=FORWARD;break;//前进方向??
-            case 6:direction=RIGHT;break;//前进方向??
-            case 7:direction=BACK;break;//前进方向??
-            case 8:direction=LEFT;break;//前进方向??
-//            case 10:Target_Angle+=-5;
-//                break;//L2键使小车逆时针旋??90??
-//            case 9:Target_Angle+=5;
-//                break;//R2键使小车逆时针旋??90??
-            case 13:Target_Speed = 0;break;//速度档位调节，rpm
-            case 14:Target_Speed = 30;break;//速度档位调节，rpm
-            case 15:Target_Speed = 60;break;
-            case 16:Target_Speed=150;break;
-                //default:Target_Speed=0;break;
-        }
-        switch (direction) {
-            case FORWARD:
-                Kinematic_Analysis(-Target_Speed,0,0);
-                break;
-            case RIGHT:
-                Kinematic_Analysis(0,Target_Speed,0);
-                break;
-            case BACK:
-                Kinematic_Analysis(Target_Speed,0,0);
-                break;
-            case LEFT:
-                Kinematic_Analysis(0,-Target_Speed,0);
-                break;
-        }
-
-        vTaskDelay(100);
-    }
 }
-//void PID_Timer_Callback(TimerHandle_t pxTimer ) {
-//    while (1) {
-//        INC_PID_Realize(&pid_speed_A, Target_Speed, motorA.speed);
-//        INC_PID_Realize(&pid_speed_B, -Target_Speed, motorB.speed);
-//        INC_PID_Realize(&pid_speed_C, Target_Speed, motorC.speed);
-//        INC_PID_Realize(&pid_speed_D, -Target_Speed, motorD.speed);
-//
-//        motorA_run(pid_speed_A.output);
-//        motorB_run(pid_speed_B.output);
-//        motorC_run(pid_speed_C.output);
-//        motorD_run(pid_speed_D.output);
-//    }
-//}
+void LED_Trun_left(void){//左转向灯
+    HAL_GPIO_WritePin(LED_L_GPIO_Port, LED_L_Pin, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(LED_R_GPIO_Port, LED_R_Pin, GPIO_PIN_SET);
+
+}
+

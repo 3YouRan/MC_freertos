@@ -10,9 +10,7 @@
     <option name="reloaded" value="true" />
   </component>
   <component name="CMakeRunConfigurationManager">
-    <generated>
-      <config projectName="MC_Proj" targetName="MC_Proj.elf" />
-    </generated>
+    <generated />
   </component>
   <component name="CMakeSettings">
     <configurations>
