@@ -110,3 +110,5 @@
 3502	4584	7643298434633626	CMakeFiles/MC_Proj.elf.dir/User/Init.c.obj	bfaa3e7a5dfa2da5
 3420	4606	7643298435769179	CMakeFiles/MC_Proj.elf.dir/Middlewares/Third_Party/FreeRTOS/Source/tasks.c.obj	bfde35dcc8633e4
 4606	5524	7643298445360070	MC_Proj.elf	c62ce2e6fa65960d
+7	475	7643324403327221	CMakeFiles/MC_Proj.elf.dir/Application/uart_task.c.obj	306b7dcf2fc00422
+476	1385	7643324409404382	MC_Proj.elf	c62ce2e6fa65960d
