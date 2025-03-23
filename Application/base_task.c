@@ -37,9 +37,6 @@ void Base_Control(void *argument){
                 Vy = 0;
             }
 
-
-
-
             Kinematic_Analysis(Vx,Vy,-angle_speed);
         }
 

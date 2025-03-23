@@ -15,6 +15,6 @@ void PS2_Task(void *argment){
         R_TICK[0]= PS2_AnologData(PSS_RX);//获取左摇杆X轴数据
         R_TICK[1]= PS2_AnologData(PSS_RY);//获取左摇杆Y轴数据
         PS2_ClearData();      //清除手柄按键数据
-        vTaskDelay(20);
+        vTaskDelay(10);
     }
 }

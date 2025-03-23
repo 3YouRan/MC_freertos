@@ -36,7 +36,8 @@ void IMU_Task(void *argument){
 //        yaw += (MPU6050.Gz+0.69f) * dt;
 //        Kalman_getAngle(&KalmanZ,yaw,MPU6050.Gz,dt);
 //        printf("yaw:%.2f\n\r",yaw);
-//        vTaskDelay(20);
+
+        vTaskDelay(10);
 
     }
 }

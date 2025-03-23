@@ -55,7 +55,7 @@ void OLED_Task(void *arg){
 
 
         OLED_Refresh_Gram();//Ë¢ÐÂ
-        vTaskDelay(250);//ÑÓÊ±
+        vTaskDelay(500);//ÑÓÊ±
     }
 }
 void float_to_str(float num, char *str, int precision) {
