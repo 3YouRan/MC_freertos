@@ -10,6 +10,8 @@ uint8_t mode_flag = 1;
 uint8_t direction = FORWARD;
 uint8_t delay_times = 0;
 uint8_t delay_flag = 0;
+float servo1_angle = 0;
+float servo2_angle = 0;
 void Base_Control(void *argument){
 
     while(1){
@@ -21,6 +23,7 @@ void Base_Control(void *argument){
             delay_times = 0;
         }
         if(mode_flag==1&&delay_flag==1) {//遥控模式，遥控器控制
+            //速度控制
             if((L_TICK[1]+L_TICK[0])>500){//未连接遥控器时，默认停止
                 Vx = 0;
                 Vy = 0;
@@ -33,6 +36,8 @@ void Base_Control(void *argument){
                 Vx = 0;
                 Vy = 0;
             }
+
+
 
 
             Kinematic_Analysis(Vx,Vy,-angle_speed);

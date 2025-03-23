@@ -72,7 +72,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
     /* USER CODE BEGIN Callback 0 */
 
-    if (htim==&htim6){
+    if (htim==&htim6){// 2ms
         times1++;
         encoder_now1=(short )(__HAL_TIM_GET_COUNTER(ENCODER1));
         encoder_now2=(short )(__HAL_TIM_GET_COUNTER(ENCODER2));

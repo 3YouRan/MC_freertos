@@ -36,6 +36,7 @@
 #include "oled_task.h"
 #include "mpu6050.h"
 #include "i2c.h"
+#include "servo.h"
 
 // 全局变量声明
 extern QueueHandle_t g_xPS2QueueHandle; //PS2手柄队列句柄
