@@ -3,8 +3,8 @@
 //
 
 #include "all.h"
-
-void servo1_set(float angle) {//设置舵机角度:0-270度 0:脉宽0.5ms,270:脉宽2.5ms PWM周期20ms
+//设置舵机角度:0-270度 0:脉宽0.5ms,270:脉宽2.5ms PWM周期20ms
+void servo1_set(float angle) {
     if(angle<0)//限制角度范围
         angle=0;
     if(angle>270)
@@ -16,7 +16,8 @@ void servo1_set(float angle) {//设置舵机角度:0-270度 0:脉宽0.5ms,270:脉宽2.5ms P
     SERVO1_SET((uint16_t)width);
 
 }
-void servo2_set(float angle) {//设置舵机角度:0-180度 0:脉宽0.5ms,180:脉宽约1.83ms PWM周期20ms
+//设置舵机角度:0-180度 0:脉宽0.5ms,180:脉宽约1.83ms PWM周期20ms
+void servo2_set(float angle) {
     if(angle<0)//限制角度范围
         angle=0;
     if(angle>180)

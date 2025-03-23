@@ -2,7 +2,7 @@
 // Created by ³Âè¤ on 25-3-22.
 //
 #include "all.h"
-#include "base_task.h"
+
 float Vx;
 float Vy;
 float angle_speed;
