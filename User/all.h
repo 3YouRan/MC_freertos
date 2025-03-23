@@ -34,6 +34,8 @@
 #include "oled.h"
 #include "adc.h"
 #include "oled_task.h"
+#include "mpu6050.h"
+#include "i2c.h"
 
 // 全局变量声明
 extern QueueHandle_t g_xPS2QueueHandle; //PS2手柄队列句柄
@@ -92,6 +94,13 @@ extern uint8_t R_TICK[2] ;//右摇杆数据
 extern const unsigned char oled_asc2_1206[95][12];
 extern const unsigned char oled_asc2_1608[95][16];
 extern int16_t ADC_Value[1];
+extern uint8_t Motor_Enable;
+
+extern float yaw;
+extern float dt;
+extern MPU6050_t MPU6050;
+extern Kalman_t KalmanZ;
+
 void my_init();
 
 

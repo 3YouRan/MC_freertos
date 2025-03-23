@@ -31,31 +31,31 @@ void OLED_Task(void *arg){
         float_to_str(voltage,Voltage_str,2);
         //重置数值显示区
         OLED_ShowString(65,0,Space);
-        OLED_ShowString(24,20,Space);
-        OLED_ShowString(24,40,Space);
-        OLED_ShowString(88,20,Space);
-        OLED_ShowString(88,40,Space);
+        OLED_ShowString(24,16,Space);
+        OLED_ShowString(24,32,Space);
+        OLED_ShowString(88,16,Space);
+        OLED_ShowString(88,32,Space);
 
         //显示数值
         OLED_ShowString(0,0,"Voltage:");//显示电池电压
         OLED_ShowString(65,0,Voltage_str);
 
-        OLED_ShowString(0,20,"VA:");//显示电机A速度
-        OLED_ShowString(24,20,V_A);
+        OLED_ShowString(0,16,"VA:");//显示电机A速度
+        OLED_ShowString(24,16,V_A);
 
 
-        OLED_ShowString(0,40,"VC:");//显示电机B速度
-        OLED_ShowString(24,40,V_C);
+        OLED_ShowString(0,32,"VC:");//显示电机B速度
+        OLED_ShowString(24,32,V_C);
 
-        OLED_ShowString(64,20,"VB:");//显示电机C速度
-        OLED_ShowString(88,20,V_B);
+        OLED_ShowString(64,16,"VB:");//显示电机C速度
+        OLED_ShowString(88,16,V_B);
 
-        OLED_ShowString(64,40,"VD:");//显示电机D速度
-        OLED_ShowString(88,40,V_D);
+        OLED_ShowString(64,32,"VD:");//显示电机D速度
+        OLED_ShowString(88,32,V_D);
 
 
         OLED_Refresh_Gram();//刷新
-        vTaskDelay(100);//延时
+        vTaskDelay(250);//延时
     }
 }
 void float_to_str(float num, char *str, int precision) {

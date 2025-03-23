@@ -5,6 +5,6 @@
 #ifndef MC_PROJ_IMU_TASK_H
 #define MC_PROJ_IMU_TASK_H
 
-void IM600_Task(void *argument);
+void IMU_Task(void *argument);
 
 #endif //MC_PROJ_IMU_TASK_H

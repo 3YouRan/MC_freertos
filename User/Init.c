@@ -26,4 +26,9 @@ void my_init() {
     Cmd_05();// 归零IM600Z轴姿态角数据，以小车复位时的姿???角为角??0??
     Cmd_19();// ??启数据主动上??
     OLED_Init();
+
+
+    while (MPU6050_Init(&hi2c2) == 1){
+        printf("MPU6050初始化失败\r\n");
+    }
 }

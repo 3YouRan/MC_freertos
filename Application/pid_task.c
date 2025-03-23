@@ -4,7 +4,7 @@
 
 
 #include "all.h"
-
+uint8_t Motor_Enable = 1;
 void PID_Task(void *argument){
     portTickType CurrentTime_PID;
     while(1){
@@ -18,11 +18,13 @@ void PID_Task(void *argument){
         angle_speed = FULL_PID_Realize(&pid_angle, Target_Angle,angle_Car_total);
 
         //输出PID计算结果
-        motorA_run((int)pid_speed_A.output);
-        motorB_run((int)pid_speed_B.output);
-        motorC_run((int)pid_speed_C.output);
-        motorD_run((int)pid_speed_D.output);
-
+        Motor_Enable = HAL_GPIO_ReadPin(Motor_Enable_GPIO_Port,Motor_Enable_Pin);
+        if(Motor_Enable == 1) {
+            motorA_run((int) pid_speed_A.output);
+            motorB_run((int) pid_speed_B.output);
+            motorC_run((int) pid_speed_C.output);
+            motorD_run((int) pid_speed_D.output);
+        }
         vTaskDelayUntil(&CurrentTime_PID,5);
 
     }

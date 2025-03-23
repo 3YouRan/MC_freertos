@@ -46,6 +46,18 @@ short encoder_now1=0;
 short encoder_now2=0;
 short encoder_now3=0;
 short encoder_now4=0;
+//float yaw = 0;
+//float dt = 0.02f;
+//MPU6050_t MPU6050;
+//Kalman_t KalmanZ = {
+//        .Q_angle = 0.008f,
+//        .Q_bias = 0.003f,
+//        .R_measure = 0.1f,
+//};
+//float Gyro_Z_Offset = 0;
+//uint8_t IMU_times = 0;
+//uint8_t yaw_flag = 0;
+
 /* USER CODE END 4 */
 
 /**
@@ -103,6 +115,21 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
                 Target_Speed_D_Now-=Target_Speed_Inc;
             }
 
+//            MPU6050_Read_All(&hi2c2,&MPU6050);
+//            if(yaw_flag==1) {
+//                yaw += (MPU6050.Gz - Gyro_Z_Offset)*0.9f * dt;
+//                Kalman_getAngle(&KalmanZ, yaw, MPU6050.Gz, dt);
+//                printf("Gz_offset:%.2f\r\n",Gyro_Z_Offset);
+//                printf("yaw:%.2f\n\r",yaw);
+//
+//            }else if(yaw_flag==0){
+//                IMU_times++;
+//                Gyro_Z_Offset +=MPU6050.Gz;
+//                if(IMU_times==100){
+//                    Gyro_Z_Offset/=100.0f;
+//                    yaw_flag=1;
+//                }
+//            }
 
         }
     }

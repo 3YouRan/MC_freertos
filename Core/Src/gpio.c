@@ -117,6 +117,12 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(R2_GPIO_Port, &GPIO_InitStruct);
 
+  /*Configure GPIO pin : Motor_Enable_Pin */
+  GPIO_InitStruct.Pin = Motor_Enable_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(Motor_Enable_GPIO_Port, &GPIO_InitStruct);
+
 }
 
 /* USER CODE BEGIN 2 */

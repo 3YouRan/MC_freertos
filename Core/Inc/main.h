@@ -107,6 +107,8 @@ void Error_Handler(void);
 #define L2_GPIO_Port GPIOC
 #define R2_Pin GPIO_PIN_2
 #define R2_GPIO_Port GPIOD
+#define Motor_Enable_Pin GPIO_PIN_3
+#define Motor_Enable_GPIO_Port GPIOD
 #define E1B_Pin GPIO_PIN_3
 #define E1B_GPIO_Port GPIOB
 #define E2A_Pin GPIO_PIN_4
