@@ -4,10 +4,12 @@
 
 #include "all.h"
 
-
+float yaw_last = 0;
+float yaw = 0;
+float yaw_total = 0;
 void IMU_Task(void *argument){
-    uint8_t rxByte;
-
+    static uint8_t init_times = 0;
+    static uint8_t init_flag = 0;
     while(1){
 //        //IMU600
 //        while (Uart.UartFifo.Cnt > 0)
@@ -37,6 +39,17 @@ void IMU_Task(void *argument){
 //        Kalman_getAngle(&KalmanZ,yaw,MPU6050.Gz,dt);
 //        printf("yaw:%.2f\n\r",yaw);
 
+//        if(init_flag == 0) {
+//            init_times++;
+//            yaw_offset += (float)stcAngle.Angle[2]/32768*180;
+//        } else if(init_times == 100) {
+//            init_flag = 1;
+//            yaw_offset /= 99;
+//        }
+//        if(init_flag == 1) {
+//            yaw = (float)stcAngle.Angle[2]/32768*180-yaw_offset;
+//            printf("yaw:%.2f\n\r",yaw);
+//        }
         vTaskDelay(10);
 
     }

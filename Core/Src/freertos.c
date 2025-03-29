@@ -121,6 +121,7 @@ void MX_FREERTOS_Init(void) {
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
+  //底层任务
   xTaskCreate(UART6_Task,"UART6_Task",128,NULL,osPriorityNormal-1,&g_xUart6TaskHandle);
   xTaskCreate(Base_Control,"Base_Control",128,NULL,osPriorityNormal,&g_xBaseControlTaskHandle);
   xTaskCreate(PS2_Task,"PS2_Task",128,NULL,osPriorityNormal,&g_xPS2TaskHandle);

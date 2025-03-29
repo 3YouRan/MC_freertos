@@ -38,6 +38,9 @@
 #include "i2c.h"
 #include "servo.h"
 #include "pan_tile_task.h"
+#include "HWT906.h"
+#include <stdlib.h>
+#include "filter.h"
 
 // 全局变量声明
 extern QueueHandle_t g_xPS2QueueHandle; //PS2手柄队列句柄
@@ -58,6 +61,8 @@ extern PID pid_position_D;
 extern float Target_Position;
 extern float Target_Speed_Now;
 extern float Target_Speed_Inc;
+extern float Target_Angle_Inc;
+extern float Target_Angle_actual;
 
 extern float Target_Speed_A;
 extern float Target_Speed_B;
@@ -99,9 +104,24 @@ extern int16_t ADC_Value[1];
 extern uint8_t Motor_Enable;
 
 extern float yaw;
-extern float dt;
-extern MPU6050_t MPU6050;
-extern Kalman_t KalmanZ;
+extern float yaw_last;
+extern float yaw_total;
+
+extern struct STime    stcTime;
+extern struct SAcc     stcAcc;
+extern struct SGyro    stcGyro;
+extern struct SAngle   stcAngle;
+extern struct SMag     stcMag;
+extern struct SDStatus stcDStatus;
+extern struct SPress 	stcPress;
+extern struct SLonLat 	stcLonLat;
+extern struct SGPSV    stcGPSV;
+extern struct SQ       stcQ;
+extern float yaw_offset;
+extern LowPassFilter filter_yaw;
+
+extern float servo1_angle;
+extern float servo2_angle;
 
 void my_init();
 

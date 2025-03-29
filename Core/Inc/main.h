@@ -95,6 +95,10 @@ void Error_Handler(void);
 #define SCL_GPIO_Port GPIOD
 #define LED_L_Pin GPIO_PIN_15
 #define LED_L_GPIO_Port GPIOD
+#define SERVO2_Pin GPIO_PIN_8
+#define SERVO2_GPIO_Port GPIOC
+#define SERVO1_Pin GPIO_PIN_9
+#define SERVO1_GPIO_Port GPIOC
 #define BUZZER_Pin GPIO_PIN_8
 #define BUZZER_GPIO_Port GPIOA
 #define LED_Pin GPIO_PIN_12

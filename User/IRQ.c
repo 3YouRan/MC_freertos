@@ -3,24 +3,43 @@
 //
 
 #include "all.h"
+uint16_t imu_init_times=0;
+uint8_t imu_init_flag=1;
+float yaw_offset=0;
 // UART接收完成回调函数
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
     if (huart == &huart6) {
-        // 处理接收到的数据
 
-        if (FifoSize > Uart.UartFifo.Cnt)
-        {
-            Uart.UartFifo.RxBuf[Uart.UartFifo.In] = rx_byte;
-            if(++Uart.UartFifo.In >= FifoSize)
-            {
-                Uart.UartFifo.In = 0;
-            }
-            ++Uart.UartFifo.Cnt;
+        CopeSerial2Data(rx_byte);
+//        if(imu_init_flag==1){//等待imu角度稳定
+//            imu_init_times++;
+//            if(imu_init_times==20000){
+//                imu_init_flag=0;
+//                yaw_offset=(float) stcAngle.Angle[2] / 32768 * 180;
+//            }
+//        }else if(imu_init_flag==0) {
+//            yaw_last = yaw;
+//            yaw = (float) stcAngle.Angle[2] / 32768 * 180-yaw_offset;
+//            if (yaw - yaw_last > 180) {//处理过零误差
+//                yaw_total += (yaw - yaw_last) - 360;
+//            } else if (yaw - yaw_last < -180) {
+//                yaw_total += (yaw - yaw_last) + 360;
+//            } else {
+//                yaw_total += yaw - yaw_last;
+//            }
+//        }
+        yaw_last = yaw;
+        yaw = (float) stcAngle.Angle[2] / 32768 * 180-yaw_offset;
+        if (yaw - yaw_last > 180) {//处理过零误差
+            yaw_total += (yaw - yaw_last) - 360;
+        } else if (yaw - yaw_last < -180) {
+            yaw_total += (yaw - yaw_last) + 360;
+        } else {
+            yaw_total += yaw - yaw_last;
         }
+        HAL_UART_Receive_IT(&huart6, &rx_byte, 1);   // 启动UART接收中断
 
-        // 重新启用接收中断，以便继续接收数??
-        HAL_UART_Receive_IT(&huart6, &rx_byte, 1);
     }
     if (huart->Instance == USART2) {
 
@@ -115,21 +134,14 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
                 Target_Speed_D_Now-=Target_Speed_Inc;
             }
 
-//            MPU6050_Read_All(&hi2c2,&MPU6050);
-//            if(yaw_flag==1) {
-//                yaw += (MPU6050.Gz - Gyro_Z_Offset)*0.9f * dt;
-//                Kalman_getAngle(&KalmanZ, yaw, MPU6050.Gz, dt);
-//                printf("Gz_offset:%.2f\r\n",Gyro_Z_Offset);
-//                printf("yaw:%.2f\n\r",yaw);
-//
-//            }else if(yaw_flag==0){
-//                IMU_times++;
-//                Gyro_Z_Offset +=MPU6050.Gz;
-//                if(IMU_times==100){
-//                    Gyro_Z_Offset/=100.0f;
-//                    yaw_flag=1;
-//                }
-//            }
+            if(Target_Angle_actual-Target_Angle>Target_Speed_Inc){
+                Target_Angle_actual-=Target_Angle_Inc;
+            }else if(Target_Angle_actual-Target_Angle<-Target_Speed_Inc){
+                Target_Angle_actual+=Target_Angle_Inc;
+            }else{
+                Target_Angle_actual=Target_Angle;
+            }
+
 
         }
     }

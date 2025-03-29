@@ -10,11 +10,14 @@ void PS2_Task(void *argment){
     while(1){
         PS2_ReadData();          //获取数据
         Key1 = PS2_DataKey();       //获取手柄按键数据
-        L_TICK[0]= PS2_AnologData(PSS_LX);//获取左摇杆X轴数据
-        L_TICK[1]= PS2_AnologData(PSS_LY);//获取左摇杆Y轴数据
-        R_TICK[0]= PS2_AnologData(PSS_RX);//获取左摇杆X轴数据
-        R_TICK[1]= PS2_AnologData(PSS_RY);//获取左摇杆Y轴数据
+//        L_TICK[0]= PS2_AnologData(PSS_LX);//获取左摇杆X轴数据
+//        L_TICK[1]= PS2_AnologData(PSS_LY);//获取左摇杆Y轴数据
+//        R_TICK[0]= PS2_AnologData(PSS_RX);//获取左摇杆X轴数据
+//        R_TICK[1]= PS2_AnologData(PSS_RY);//获取左摇杆Y轴数据
+
+//        printf("PS2\r\n");
         PS2_ClearData();      //清除手柄按键数据
-        vTaskDelay(10);
+        vTaskDelay(50);
+
     }
 }

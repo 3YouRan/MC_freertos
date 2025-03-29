@@ -10,8 +10,7 @@ uint8_t mode_flag = 1;
 uint8_t direction = FORWARD;
 uint8_t delay_times = 0;
 uint8_t delay_flag = 0;
-float servo1_angle = 0;
-float servo2_angle = 0;
+
 void Base_Control(void *argument){
 
     while(1){

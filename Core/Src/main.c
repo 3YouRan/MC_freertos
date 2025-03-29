@@ -53,6 +53,7 @@
 
 float Target_Speed_Now=0;
 float Target_Speed_Inc=3;
+float Target_Angle_Inc=1.5f;
 
 float Target_Speed_A=0;
 float Target_Speed_B=0;
@@ -127,8 +128,9 @@ int main(void)
   MX_USART6_UART_Init();
   MX_TIM6_Init();
   MX_ADC1_Init();
-  MX_I2C2_Init();
   MX_TIM8_Init();
+  MX_USART1_UART_Init();
+  MX_I2C2_Init();
   /* USER CODE BEGIN 2 */
   my_init();
 
@@ -213,7 +215,6 @@ void SystemClock_Config(void)
   * @param  htim : TIM handle
   * @retval None
   */
-
 
 /**
   * @brief  This function is executed in case of error occurrence.

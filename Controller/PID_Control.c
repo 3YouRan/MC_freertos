@@ -76,10 +76,10 @@ void PID_Init(){
     pid_angle.maxOutput=1000;
     pid_angle.lastErr = 0;
     pid_angle.output = 0;
-    pid_angle.kp = 10;
+    pid_angle.kp = 15;
     pid_angle.ki = 0;
     pid_angle.kd = 0;
-    pid_angle.deadZone = 0.01;
+    pid_angle.deadZone = 0.2f;
 }
 /****************************************
  * 作用：增量式PID
