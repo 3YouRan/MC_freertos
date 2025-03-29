@@ -132,6 +132,7 @@ extern float servo2_angle;
 
 void my_init();
 
-
+#define DATA_SIZE 14
+#define DEBUG_RV_MXSIZE 255
 
 #endif //MC_PROJ_ALL_H
