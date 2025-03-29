@@ -41,6 +41,7 @@
 #include "HWT906.h"
 #include <stdlib.h>
 #include "filter.h"
+#include "debug.h"
 //宏定义
 #define RXSIZE 200
 // 全局变量声明
@@ -132,6 +133,7 @@ extern float servo2_angle;
 
 void my_init();
 
-
+#define DATA_SIZE 14
+#define DEBUG_RV_MXSIZE 255
 
 #endif //MC_PROJ_ALL_H

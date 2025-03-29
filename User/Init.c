@@ -2,6 +2,7 @@
 // Created by 陈瑜 on 25-3-22.
 //
 #include "all.h"
+#include "debug.h"
 void my_init() {
     //电源电压ADC采样初始化
     HAL_ADC_Start_DMA(&hadc1, (uint32_t*)ADC_Value, 1);
@@ -25,8 +26,6 @@ void my_init() {
     RetargetInit(&huart2);
     //UART接收中断初始化
     HAL_UART_Receive_IT(&huart2, (uint8_t *)RxBuffer, 1);   // 启动UART接收中断
-//    HAL_UART_Receive_IT(&huart6, &rx_byte, 1);   // 启动UART接收中断
-
     HAL_UART_Receive_DMA(&huart6,&rx_byte,1);
     HAL_UART_Receive_IT(&huart3, (uint8_t *)RxBuffer_UP, 1);   // 启动UART接收中断
     //电机初始化
@@ -36,6 +35,7 @@ void my_init() {
 
     //OLED初始化
     OLED_Init();
+    Set_Target_UartInit();
     //滤波器初始化
 //    initialize_LowPassFilter(&filter_yaw, 0.85f);
 

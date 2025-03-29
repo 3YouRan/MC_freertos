@@ -20,7 +20,6 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "stm32f4xx_it.h"
-
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "all.h"
@@ -425,20 +424,10 @@ void USART6_IRQHandler(void)
 {
   /* USER CODE BEGIN USART6_IRQn 0 */
 
-    if (__HAL_UART_GET_FLAG(&huart6,UART_FLAG_IDLE) == SET) {
-        //????????§Ø???
-        __HAL_UART_CLEAR_IDLEFLAG(&huart6);
-        //??DMA
-        HAL_UART_DMAStop(&huart6);
-
-        //?????????????
-//        RxLine_UP = RXSIZE - __HAL_DMA_GET_COUNTER(&hdma_usart6_rx);
-        //????????????????????
-
-    }
   /* USER CODE END USART6_IRQn 0 */
   HAL_UART_IRQHandler(&huart6);
   /* USER CODE BEGIN USART6_IRQn 1 */
+  DMA_UartIrqHandler(&huart6);
 
   /* USER CODE END USART6_IRQn 1 */
 }

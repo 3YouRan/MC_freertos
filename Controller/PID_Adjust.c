@@ -12,6 +12,10 @@ float Target_Position;
 float Target_Angle;
 float Target_Angle_actual;
 
+uint16_t RxLine_UP;//鎸囦护闀垮害
+uint8_t RxBuffer_UP[1];//涓插彛鎺ユ敹缂撳啿
+uint8_t DataBuff_UP[200];//鎸囦护鍐呭
+
 /*
  * 解析出DataBuff中的数据
  * 返回解析得到的数据
