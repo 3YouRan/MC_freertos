@@ -15,11 +15,11 @@ struct SPress 	stcPress;
 struct SLonLat 	stcLonLat;
 struct SGPSV    stcGPSV;
 struct SQ       stcQ;
-
+unsigned char ucRxBuffer[250];
+unsigned char ucRxCnt = 0;
 void CopeSerial2Data(unsigned char ucData)
 {
-    static unsigned char ucRxBuffer[250];
-    static unsigned char ucRxCnt = 0;
+
 
     ucRxBuffer[ucRxCnt++]=ucData;	//将收到的数据存入缓冲区中
     if (ucRxBuffer[0]!=0x55) //数据头不对，则重新开始寻找0x55数据头

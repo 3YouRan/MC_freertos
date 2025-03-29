@@ -6,29 +6,37 @@
 uint16_t imu_init_times=0;
 uint8_t imu_init_flag=1;
 float yaw_offset=0;
+
+uint16_t RxLine_UP;//鎸囦护闀垮害
+uint8_t RxBuffer_UP[1];//涓插彛鎺ユ敹缂撳啿
+uint8_t DataBuff_UP[200];//鎸囦护鍐呭
+
 // UART接收完成回调函数
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
+    if (huart == &huart3) {
+
+        RxLine_UP++;                            // 接收行数加1
+        DataBuff_UP[RxLine_UP-1]=RxBuffer_UP[0];       // 将接收到的数据存入缓冲区
+        if(RxBuffer_UP[0]=='!')                  // 判断是否接收到感叹号
+        {
+            printf("RXLen=%d\r\n",RxLine_UP);
+            for(int i=0;i<RxLine_UP;i++)
+                printf("UART DataBuff[%d] = %c\r\n",i,DataBuff_UP[i]);
+//            USART_PID_Adjust(1);             // 调整USART PID
+            USART_From_UP();
+            memset(DataBuff_UP,0,sizeof(DataBuff_UP));   // 清空接收缓冲区
+            RxLine_UP=0;                           // 接收行数清零
+        }
+        RxBuffer_UP[0]=0;                        // 重置接收缓冲区
+
+        HAL_UART_Receive_IT(&huart3, (uint8_t *)RxBuffer_UP, 1);   // 重新启动UART接收中断
+
+    }
     if (huart == &huart6) {
 
         CopeSerial2Data(rx_byte);
-//        if(imu_init_flag==1){//等待imu角度稳定
-//            imu_init_times++;
-//            if(imu_init_times==20000){
-//                imu_init_flag=0;
-//                yaw_offset=(float) stcAngle.Angle[2] / 32768 * 180;
-//            }
-//        }else if(imu_init_flag==0) {
-//            yaw_last = yaw;
-//            yaw = (float) stcAngle.Angle[2] / 32768 * 180-yaw_offset;
-//            if (yaw - yaw_last > 180) {//处理过零误差
-//                yaw_total += (yaw - yaw_last) - 360;
-//            } else if (yaw - yaw_last < -180) {
-//                yaw_total += (yaw - yaw_last) + 360;
-//            } else {
-//                yaw_total += yaw - yaw_last;
-//            }
-//        }
+        printf("huart6 idle\r\n");
         yaw_last = yaw;
         yaw = (float) stcAngle.Angle[2] / 32768 * 180-yaw_offset;
         if (yaw - yaw_last > 180) {//处理过零误差
@@ -38,7 +46,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
         } else {
             yaw_total += yaw - yaw_last;
         }
-        HAL_UART_Receive_IT(&huart6, &rx_byte, 1);   // 启动UART接收中断
+        HAL_UART_Receive_DMA(&huart6, &rx_byte, 1);   // 启动UART接收中断
 
     }
     if (huart->Instance == USART2) {

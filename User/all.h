@@ -41,7 +41,8 @@
 #include "HWT906.h"
 #include <stdlib.h>
 #include "filter.h"
-
+//宏定义
+#define RXSIZE 200
 // 全局变量声明
 extern QueueHandle_t g_xPS2QueueHandle; //PS2手柄队列句柄
 extern float Target_Speed;
@@ -76,6 +77,12 @@ extern float Target_Speed_D_Now;
 extern uint16_t RxLine;//鎸囦护闀垮害
 extern uint8_t RxBuffer[1];//涓插彛鎺ユ敹缂撳啿
 extern uint8_t DataBuff[200];//鎸囦护鍐呭
+//串口6接收缓冲区
+extern uint16_t RxLine_UP;//鎸囦护闀垮害
+extern uint8_t RxBuffer_UP[1];//涓插彛鎺ユ敹缂撳啿
+extern uint8_t DataBuff_UP[200];//鎸囦护鍐呭
+//陀螺仪数据
+
 //陀螺仪数据
 extern U8 Data[9];
 extern U16 MASK[16];

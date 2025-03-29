@@ -16,7 +16,7 @@ float Target_Angle_actual;
  * 解析出DataBuff中的数据
  * 返回解析得到的数据
  */
-float Get_Data(void)
+float Get_Data(uint8_t* Data_Usart)
 {
     uint8_t data_Start_Num = 0; // 记录数据位开始的地方
     uint8_t data_End_Num = 0;   // 记录数据位结束的地方
@@ -26,9 +26,9 @@ float Get_Data(void)
     // 查找等号和感叹号的位置
     for (uint8_t i = 0; i < 200; i++)
     {
-        if (DataBuff[i] == '=')
+        if (Data_Usart[i] == '=')
             data_Start_Num = i + 1; // +1是直接定位到数据起始位
-        if (DataBuff[i] == '!')
+        if (Data_Usart[i] == '!')
         {
             data_End_Num = i - 1;
             break;
@@ -36,7 +36,7 @@ float Get_Data(void)
     }
 
     // 判断负数
-    if (DataBuff[data_Start_Num] == '-')
+    if (Data_Usart[data_Start_Num] == '-')
     {
         data_Start_Num += 1; // 后移一位到数据位
         minus_Flag = 1;      // 负数flag
@@ -48,8 +48,8 @@ float Get_Data(void)
 
     for (uint8_t i = data_Start_Num; i <= data_End_Num && index < 19; i++)
     {
-        if (DataBuff[i] == '\0') break; // 遇到字符串结束符
-        numberStr[index++] = DataBuff[i];
+        if (Data_Usart[i] == '\0') break; // 遇到字符串结束符
+        numberStr[index++] = Data_Usart[i];
     }
     numberStr[index] = '\0'; // 添加字符串结束符
 
@@ -67,7 +67,7 @@ float Get_Data(void)
  */
 void USART_PID_Adjust(uint8_t Motor_n)
 {
-    float data_Get = Get_Data(); // 存放接收到的数据
+    float data_Get = Get_Data(DataBuff); // 存放接收到的数据
 //    printf("data=%.2f\r\n",data_Get);
     if(Motor_n == 1)//左边电机
     {
@@ -117,4 +117,13 @@ void USART_PID_Adjust(uint8_t Motor_n)
 //    }
 }
 
+void USART_From_UP()
+{
+    float data_Get = Get_Data(DataBuff_UP); // 存放接收到的数据
 
+    if((DataBuff_UP[0]=='S' && DataBuff_UP[1]=='p') && DataBuff_UP[2]=='e') //目标速度
+        servo2_angle = data_Get;
+    else if((DataBuff_UP[0]=='P' && DataBuff_UP[1]=='o') && DataBuff_UP[2]=='s') //目标位置
+        servo1_angle = data_Get;
+
+}

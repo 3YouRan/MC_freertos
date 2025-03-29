@@ -25,8 +25,10 @@ void my_init() {
     RetargetInit(&huart2);
     //UART接收中断初始化
     HAL_UART_Receive_IT(&huart2, (uint8_t *)RxBuffer, 1);   // 启动UART接收中断
-    HAL_UART_Receive_IT(&huart6, &rx_byte, 1);   // 启动UART接收中断
+//    HAL_UART_Receive_IT(&huart6, &rx_byte, 1);   // 启动UART接收中断
 
+    HAL_UART_Receive_DMA(&huart6,&rx_byte,1);
+    HAL_UART_Receive_IT(&huart3, (uint8_t *)RxBuffer_UP, 1);   // 启动UART接收中断
     //电机初始化
     motor_init();
     //PID初始化
