@@ -9,38 +9,40 @@ float yaw_offset=0;
 // UART接收完成回调函数
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
-    if (huart == &huart6) {
-
-        CopeSerial2Data(rx_byte);
-//        if(imu_init_flag==1){//等待imu角度稳定
-//            imu_init_times++;
-//            if(imu_init_times==20000){
-//                imu_init_flag=0;
-//                yaw_offset=(float) stcAngle.Angle[2] / 32768 * 180;
-//            }
-//        }else if(imu_init_flag==0) {
-//            yaw_last = yaw;
-//            yaw = (float) stcAngle.Angle[2] / 32768 * 180-yaw_offset;
-//            if (yaw - yaw_last > 180) {//处理过零误差
-//                yaw_total += (yaw - yaw_last) - 360;
-//            } else if (yaw - yaw_last < -180) {
-//                yaw_total += (yaw - yaw_last) + 360;
-//            } else {
-//                yaw_total += yaw - yaw_last;
-//            }
+//    if (huart == &huart6) {
+//
+//        CopeSerial2Data(rx_byte);
+////        if(imu_init_flag==1){//等待imu角度稳定
+////            imu_init_times++;
+////            if(imu_init_times==20000){
+////                imu_init_flag=0;
+////                yaw_offset=(float) stcAngle.Angle[2] / 32768 * 180;
+////            }
+////        }else if(imu_init_flag==0) {
+////            yaw_last = yaw;
+////            yaw = (float) stcAngle.Angle[2] / 32768 * 180-yaw_offset;
+////            if (yaw - yaw_last > 180) {//处理过零误差
+////                yaw_total += (yaw - yaw_last) - 360;
+////            } else if (yaw - yaw_last < -180) {
+////                yaw_total += (yaw - yaw_last) + 360;
+////            } else {
+////                yaw_total += yaw - yaw_last;
+////            }
+////        }
+//
+//        yaw_last = yaw;
+//        yaw = (float) stcAngle.Angle[2] / 32768 * 180-yaw_offset;
+//        if (yaw - yaw_last > 180) {//处理过零误差
+//            yaw_total += (yaw - yaw_last) - 360;
+//        } else if (yaw - yaw_last < -180) {
+//            yaw_total += (yaw - yaw_last) + 360;
+//        } else {
+//            yaw_total += yaw - yaw_last;
 //        }
-        yaw_last = yaw;
-        yaw = (float) stcAngle.Angle[2] / 32768 * 180-yaw_offset;
-        if (yaw - yaw_last > 180) {//处理过零误差
-            yaw_total += (yaw - yaw_last) - 360;
-        } else if (yaw - yaw_last < -180) {
-            yaw_total += (yaw - yaw_last) + 360;
-        } else {
-            yaw_total += yaw - yaw_last;
-        }
-        HAL_UART_Receive_IT(&huart6, &rx_byte, 1);   // 启动UART接收中断
+//        HAL_UART_Receive_IT(&huart6, &rx_byte, 1);   // 启动UART接收中断
+//
+//    }
 
-    }
     if (huart->Instance == USART2) {
 
         RxLine++;                            // 接收行数加1
@@ -98,7 +100,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
         encoder_now3=(short )(__HAL_TIM_GET_COUNTER(ENCODER3));
         encoder_now4=(short )(__HAL_TIM_GET_COUNTER(ENCODER4));
 
-        motorA.totalCount+=encoder_now1;//绱姞鑴夊啿鏁?
+        motorA.totalCount+=encoder_now1;
         motorB.totalCount+=encoder_now2;
         motorC.totalCount+=encoder_now3;
         motorD.totalCount+=encoder_now4;
