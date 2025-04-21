@@ -2,7 +2,7 @@
 // Created by 陈瑜 on 25-3-22.
 //
 #include "all.h"
-#include "debug.h"
+
 void my_init() {
     //电源电压ADC采样初始化
     HAL_ADC_Start_DMA(&hadc1, (uint32_t*)ADC_Value, 1);

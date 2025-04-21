@@ -7,23 +7,14 @@
 #include "task.h"
 //PID结构体
 PID pid_speed_A;
-PID pid_position_A;
 
 PID pid_speed_B;
-PID pid_position_B;
 
 PID pid_speed_C;
-PID pid_position_C;
 
 PID pid_speed_D;
-PID pid_position_D;
 
 PID pid_angle;
-
-extern float Target_Speed;
-extern float Target_Position;
-extern QueueHandle_t g_xPS2QueueHandle; //PS2手柄队列句柄
-extern motor motorA, motorB, motorC, motorD;
 
 void PID_Init(){
     pid_speed_A.err = 0;
@@ -92,8 +83,8 @@ float INC_PID_Realize(PID* pid,float target,float feedback)//一次PID计算
     if(pid->err < pid->deadZone && pid->err > -pid->deadZone) pid->err = 0;//pid死区
     pid->integral += pid->err;
 
-    if(pid->ki * pid->integral < -pid->maxIntegral) pid->integral = -pid->maxIntegral / pid->ki;//积分限幅
-    else if(pid->ki * pid->integral > pid->maxIntegral) pid->integral = pid->maxIntegral / pid->ki;
+    if(pid->ki * pid->integral < -pid->maxIntegral) pid->integral = -pid->maxIntegral ;//积分限幅
+    else if(pid->ki * pid->integral > pid->maxIntegral) pid->integral = pid->maxIntegral;
 
     if(target == 0) pid->integral = 0; // 刹车时清空i
 
@@ -129,25 +120,25 @@ float FULL_PID_Realize(PID* pid,float target,float feedback)//一次PID计算
     if(pid->err < pid->deadZone && pid->err > -pid->deadZone) pid->err = 0;//pid死区
     pid->integral += pid->err;
 
-    if(pid->ki * pid->integral < -pid->maxIntegral) pid->integral = -pid->maxIntegral / pid->ki;//积分限幅
-    else if(pid->ki * pid->integral > pid->maxIntegral) pid->integral = pid->maxIntegral / pid->ki;
+    if(pid->ki * pid->integral < -pid->maxIntegral) pid->integral = -pid->maxIntegral ;//积分限幅
+    else if(pid->ki * pid->integral > pid->maxIntegral) pid->integral = pid->maxIntegral ;
 
     if(target == 0) pid->integral = 0; // 刹车时清空i
 
     pid->output = (pid->kp * pid->err) + (pid->ki * pid->integral)
                    + (pid->kd * (pid->err - pid->lastErr));//全量式PID
 
-//    //输出限幅
-//    if(target >= 0)//正转时
-//    {
-//        if(pid->output < 0) pid->output = 0;
-//        else if(pid->output > pid->maxOutput) pid->output = pid->maxOutput;
-//    }
-//    else if(target < 0)//反转时
-//    {
-//        if(pid->output < -pid->maxOutput) pid->output = -pid->maxOutput;
-//        else if(pid->output > 0) pid->output = 0;
-//    }
+    //输出限幅
+    if(target >= 0)//正转时
+    {
+        if(pid->output < 0) pid->output = 0;
+        else if(pid->output > pid->maxOutput) pid->output = pid->maxOutput;
+    }
+    else if(target < 0)//反转时
+    {
+        if(pid->output < -pid->maxOutput) pid->output = -pid->maxOutput;
+        else if(pid->output > 0) pid->output = 0;
+    }
 
     pid->lastErr = pid->err;
 //    if(target == 0) pid->output = 0; // 刹车时直接输出0
@@ -155,14 +146,4 @@ float FULL_PID_Realize(PID* pid,float target,float feedback)//一次PID计算
 
 }
 
-void LED_Trun_right(void){//右转向灯
-    HAL_GPIO_WritePin(LED_R_GPIO_Port, LED_R_Pin, GPIO_PIN_SET);
-    HAL_GPIO_WritePin(LED_L_GPIO_Port, LED_L_Pin, GPIO_PIN_SET);
-
-}
-void LED_Trun_left(void){//左转向灯
-    HAL_GPIO_WritePin(LED_L_GPIO_Port, LED_L_Pin, GPIO_PIN_SET);
-    HAL_GPIO_WritePin(LED_R_GPIO_Port, LED_R_Pin, GPIO_PIN_SET);
-
-}
 

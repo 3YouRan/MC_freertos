@@ -8,6 +8,15 @@ uint8_t Motor_Enable = 1;
 uint16_t pid_delay = 0;
 uint8_t pid_flag = 0;
 
+float Target_Speed_A=0;
+float Target_Speed_B=0;
+float Target_Speed_C=0;
+float Target_Speed_D=0;
+float Target_Speed_A_Now=0;
+float Target_Speed_B_Now=0;
+float Target_Speed_C_Now=0;
+float Target_Speed_D_Now=0;
+
 void PID_Task(void *argument){
     portTickType CurrentTime_PID;
     while(1){
@@ -24,7 +33,7 @@ void PID_Task(void *argument){
             INC_PID_Realize(&pid_speed_C, Target_Speed_C, motorC.speed);
             INC_PID_Realize(&pid_speed_D, -Target_Speed_D, motorD.speed);
             //角度环
-            angle_speed = FULL_PID_Realize(&pid_angle, Target_Angle_actual, yaw_total);
+            Base_status.omega= -FULL_PID_Realize(&pid_angle, Target_Angle_actual, yaw_total);
         }
         //输出PID计算结果
         Motor_Enable = HAL_GPIO_ReadPin(Motor_Enable_GPIO_Port,Motor_Enable_Pin);

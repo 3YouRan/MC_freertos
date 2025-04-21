@@ -51,27 +51,14 @@
 
 /* USER CODE BEGIN PV */
 
-float Target_Speed_Now=0;
-float Target_Speed_Inc=3;
-float Target_Angle_Inc=1.5f;
 
-float Target_Speed_A=0;
-float Target_Speed_B=0;
-float Target_Speed_C=0;
-float Target_Speed_D=0;
-float Target_Speed_A_Now=0;
-float Target_Speed_B_Now=0;
-float Target_Speed_C_Now=0;
-float Target_Speed_D_Now=0;
-//����6���ջ�����
-uint16_t RxLine = 0;//指令长度
-uint8_t RxBuffer[1];//串口接收缓冲
-uint8_t DataBuff[200];//指令内容
+
+
+
 
 uint8_t rx_byte;
-float angle_Car=0;
-//ѭ������
-uint8_t sensor[4];
+
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/

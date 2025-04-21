@@ -4,7 +4,7 @@
 
 #ifndef MC_PROJ_ALL_H
 #define MC_PROJ_ALL_H
-// 头文件包含
+//// 头文件包含
 #include "main.h"
 #include "base_task.h"
 #include "FreeRTOS.h"
@@ -21,7 +21,6 @@
 #include "im948_CMD.h"
 #include "PS2.h"
 #include "base_task.h"
-#include "Kinematic_Analysis.h"
 #include "usart.h"
 #include "bsp_usart.h"
 #include "string.h"
@@ -41,27 +40,21 @@
 #include "HWT906.h"
 #include <stdlib.h>
 #include "filter.h"
-#include "debug.h"
-//宏定义
+
+////宏定义
 #define RXSIZE 200
-// 全局变量声明
-extern QueueHandle_t g_xPS2QueueHandle; //PS2手柄队列句柄
-extern float Target_Speed;
+#define DATA_SIZE 14
+#define DEBUG_RV_MXSIZE 255
+//// 全局变量声明
 
 extern motor motorA, motorB, motorC, motorD;
 extern TaskHandle_t g_xUart6TaskHandle;
 
 extern PID pid_speed_A;
-extern PID pid_position_A;
 extern PID pid_speed_B;
-extern PID pid_position_B;
 extern PID pid_speed_C;
-extern PID pid_position_C;
 extern PID pid_speed_D;
-extern PID pid_position_D;
 
-extern float Target_Position;
-extern float Target_Speed_Now;
 extern float Target_Speed_Inc;
 extern float Target_Angle_Inc;
 extern float Target_Angle_actual;
@@ -74,14 +67,14 @@ extern float Target_Speed_A_Now;
 extern float Target_Speed_B_Now;
 extern float Target_Speed_C_Now;
 extern float Target_Speed_D_Now;
-//串口6接收缓冲区
-extern uint16_t RxLine;//鎸囦护闀垮害
-extern uint8_t RxBuffer[1];//涓插彛鎺ユ敹缂撳啿
-extern uint8_t DataBuff[200];//鎸囦护鍐呭
-//串口6接收缓冲区
-extern uint16_t RxLine_UP;//鎸囦护闀垮害
-extern uint8_t RxBuffer_UP[1];//涓插彛鎺ユ敹缂撳啿
-extern uint8_t DataBuff_UP[200];//鎸囦护鍐呭
+//串口2接收缓冲区
+extern uint16_t RxLine;
+extern uint8_t RxBuffer[1];
+extern uint8_t DataBuff[200];
+//串口3接收缓冲区
+extern uint16_t RxLine_UP;
+extern uint8_t RxBuffer_UP[1];
+extern uint8_t DataBuff_UP[200];
 //陀螺仪数据
 
 //陀螺仪数据
@@ -98,9 +91,6 @@ extern uint8_t sensor[4];
 extern uint8_t Key1;
 
 extern uint8_t direction ;
-extern float angle_speed;
-extern float Vx;
-extern float Vy;
 extern uint8_t mode_flag;//模式1：遥控，模式0：循迹
 
 extern uint8_t L_TICK[2] ;//左摇杆数据
@@ -125,15 +115,18 @@ extern struct SPress 	stcPress;
 extern struct SLonLat 	stcLonLat;
 extern struct SGPSV    stcGPSV;
 extern struct SQ       stcQ;
-extern float yaw_offset;
+
 extern LowPassFilter filter_yaw;
 
 extern float servo1_angle;
 extern float servo2_angle;
+extern Base_status_t Base_status;
 
+////IRQ.c，Init.c中函数的声明
 void my_init();
+void Set_Target_UartInit();
+void DMA_UartIrqHandler(UART_HandleTypeDef *huart);
+void DMA_UartIdleCallback(UART_HandleTypeDef *huart);//注意一个问题，调用的时候再写&huart6，否则在这个函数里会出问题
 
-#define DATA_SIZE 14
-#define DEBUG_RV_MXSIZE 255
 
 #endif //MC_PROJ_ALL_H

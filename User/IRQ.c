@@ -3,45 +3,14 @@
 //
 
 #include "all.h"
-uint16_t imu_init_times=0;
-uint8_t imu_init_flag=1;
-float yaw_offset=0;
+
+uint16_t RxLine = 0;//指令长度
+uint8_t RxBuffer[1];//串口接收缓冲
+uint8_t DataBuff[200];//指令内容
+
 // UART接收完成回调函数
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
-//    if (huart == &huart6) {
-//
-//        CopeSerial2Data(rx_byte);
-////        if(imu_init_flag==1){//等待imu角度稳定
-////            imu_init_times++;
-////            if(imu_init_times==20000){
-////                imu_init_flag=0;
-////                yaw_offset=(float) stcAngle.Angle[2] / 32768 * 180;
-////            }
-////        }else if(imu_init_flag==0) {
-////            yaw_last = yaw;
-////            yaw = (float) stcAngle.Angle[2] / 32768 * 180-yaw_offset;
-////            if (yaw - yaw_last > 180) {//处理过零误差
-////                yaw_total += (yaw - yaw_last) - 360;
-////            } else if (yaw - yaw_last < -180) {
-////                yaw_total += (yaw - yaw_last) + 360;
-////            } else {
-////                yaw_total += yaw - yaw_last;
-////            }
-////        }
-//
-//        yaw_last = yaw;
-//        yaw = (float) stcAngle.Angle[2] / 32768 * 180-yaw_offset;
-//        if (yaw - yaw_last > 180) {//处理过零误差
-//            yaw_total += (yaw - yaw_last) - 360;
-//        } else if (yaw - yaw_last < -180) {
-//            yaw_total += (yaw - yaw_last) + 360;
-//        } else {
-//            yaw_total += yaw - yaw_last;
-//        }
-//        HAL_UART_Receive_IT(&huart6, &rx_byte, 1);   // 启动UART接收中断
-//
-//    }
 
     if (huart->Instance == USART2) {
 
@@ -62,22 +31,67 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
         HAL_UART_Receive_IT(&huart2, (uint8_t *)RxBuffer, 1);   // 重新启动UART接收中断
     }
 }
+
+uint8_t debugRvAll[DEBUG_RV_MXSIZE] = {0};
+void Set_Target_UartInit()
+{
+    //  数据接收
+    __HAL_UART_ENABLE_IT(&huart6, UART_IT_IDLE);//使能串口6的空闲中断,用于串口接收
+    HAL_UART_Receive_DMA(&huart6, (uint8_t*)&debugRvAll, DEBUG_RV_MXSIZE);//开启串口的DMA接收，debugRvAll存储串口接受的第一手数据
+
+}
+
+void DMA_UartIrqHandler(UART_HandleTypeDef *huart)
+{
+    if(huart->Instance == huart6.Instance)//判断是否是串口6
+    {
+
+        if(RESET != __HAL_UART_GET_FLAG(huart, UART_FLAG_IDLE))//判断是否是空闲中断
+        {
+            __HAL_UART_CLEAR_IDLEFLAG(huart);//清楚空闲中断标志，防止会一直不断进入中断
+
+            DMA_UartIdleCallback(huart);//调用中断处理函数
+
+        }
+    }
+
+}
+
+
+void DMA_UartIdleCallback(UART_HandleTypeDef *huart)//注意一个问题，调用的时候再写&huart6，否则在这个函数里会出问题
+{
+    HAL_UART_DMAStop(huart);//停止本次DMA传输
+
+    //计算接收到的数据长度，接收到的数据长度等于数组的最大存储长度减去DMA空闲的数据区长度
+    uint8_t data_length  = DEBUG_RV_MXSIZE - __HAL_DMA_GET_COUNTER(huart->hdmarx);
+
+    memcpy(&stcAngle,&debugRvAll[2],8);
+
+    yaw_last = yaw;
+    yaw = (float) stcAngle.Angle[2] / 32768 * 180;
+    if (yaw - yaw_last > 180) {//处理过零误差
+        yaw_total += (yaw - yaw_last) - 360;
+    } else if (yaw - yaw_last < -180) {
+        yaw_total += (yaw - yaw_last) + 360;
+    } else {
+        yaw_total += yaw - yaw_last;
+    }
+    data_length = 0;
+    memset(&debugRvAll,0,data_length); //清零接收缓冲区
+
+    HAL_UART_Receive_DMA(huart, (uint8_t*)&debugRvAll, DEBUG_RV_MXSIZE);//循环中开启串口的DMA接收
+
+}
+
+
 int times1=0;
 short encoder_now1=0;
 short encoder_now2=0;
 short encoder_now3=0;
 short encoder_now4=0;
-//float yaw = 0;
-//float dt = 0.02f;
-//MPU6050_t MPU6050;
-//Kalman_t KalmanZ = {
-//        .Q_angle = 0.008f,
-//        .Q_bias = 0.003f,
-//        .R_measure = 0.1f,
-//};
-//float Gyro_Z_Offset = 0;
-//uint8_t IMU_times = 0;
-//uint8_t yaw_flag = 0;
+
+float Target_Speed_Inc=3;
+float Target_Angle_Inc=1.5f;
 
 /* USER CODE END 4 */
 
@@ -99,7 +113,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
         encoder_now2=(short )(__HAL_TIM_GET_COUNTER(ENCODER2));
         encoder_now3=(short )(__HAL_TIM_GET_COUNTER(ENCODER3));
         encoder_now4=(short )(__HAL_TIM_GET_COUNTER(ENCODER4));
-
         motorA.totalCount+=encoder_now1;
         motorB.totalCount+=encoder_now2;
         motorC.totalCount+=encoder_now3;
@@ -114,37 +127,43 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
         motorD.speed=(float )encoder_now4/(4*30*500)*1000*60;
         if(times1==10){
             times1=0;
-            //加速
+            //目标速度爬坡
             if (Target_Speed_A_Now<Target_Speed_A){
                 Target_Speed_A_Now+=Target_Speed_Inc;
             }else if(Target_Speed_A_Now>Target_Speed_A){
                 Target_Speed_A_Now-=Target_Speed_Inc;
+            }else if(fabsf(Target_Speed_A_Now-Target_Speed_A)<Target_Speed_Inc){
+                Target_Speed_A_Now=Target_Speed_A;
             }
             if (Target_Speed_B_Now<Target_Speed_B){
                 Target_Speed_B_Now+=Target_Speed_Inc;
             }else if(Target_Speed_B_Now>Target_Speed_B){
                 Target_Speed_B_Now-=Target_Speed_Inc;
+            } else if(fabsf(Target_Speed_B_Now-Target_Speed_B)<Target_Speed_Inc){
+                Target_Speed_B_Now=Target_Speed_B;
             }
             if (Target_Speed_C_Now<Target_Speed_C){
                 Target_Speed_C_Now+=Target_Speed_Inc;
             }else if(Target_Speed_C_Now>Target_Speed_C){
                 Target_Speed_C_Now-=Target_Speed_Inc;
+            }else if(fabsf(Target_Speed_C_Now-Target_Speed_C)<Target_Speed_Inc){
+                Target_Speed_C_Now=Target_Speed_C;
             }
             if (Target_Speed_D_Now<Target_Speed_D){
                 Target_Speed_D_Now+=Target_Speed_Inc;
             }else if(Target_Speed_D_Now>Target_Speed_D){
                 Target_Speed_D_Now-=Target_Speed_Inc;
+            } else if(fabsf(Target_Speed_D_Now-Target_Speed_D)<Target_Speed_Inc){
+                Target_Speed_D_Now=Target_Speed_D;
             }
-
+            //目标角度爬坡
             if(Target_Angle_actual-Target_Angle>Target_Speed_Inc){
                 Target_Angle_actual-=Target_Angle_Inc;
             }else if(Target_Angle_actual-Target_Angle<-Target_Speed_Inc){
                 Target_Angle_actual+=Target_Angle_Inc;
-            }else{
+            }else if(fabsf(Target_Angle_actual-Target_Angle)<Target_Angle_Inc){
                 Target_Angle_actual=Target_Angle;
             }
-
-
         }
     }
     /* USER CODE END Callback 0 */
