@@ -123,22 +123,16 @@ float FULL_PID_Realize(PID* pid,float target,float feedback)//一次PID计算
     if(pid->ki * pid->integral < -pid->maxIntegral) pid->integral = -pid->maxIntegral ;//积分限幅
     else if(pid->ki * pid->integral > pid->maxIntegral) pid->integral = pid->maxIntegral ;
 
-    if(target == 0) pid->integral = 0; // 刹车时清空i
+//    if(target == 0) pid->integral = 0; // 刹车时清空i
 
     pid->output = (pid->kp * pid->err) + (pid->ki * pid->integral)
                    + (pid->kd * (pid->err - pid->lastErr));//全量式PID
 
     //输出限幅
-    if(target >= 0)//正转时
-    {
-        if(pid->output < 0) pid->output = 0;
-        else if(pid->output > pid->maxOutput) pid->output = pid->maxOutput;
-    }
-    else if(target < 0)//反转时
-    {
-        if(pid->output < -pid->maxOutput) pid->output = -pid->maxOutput;
-        else if(pid->output > 0) pid->output = 0;
-    }
+    if(pid->output > pid->maxOutput) pid->output = pid->maxOutput;
+
+    if(pid->output < -pid->maxOutput) pid->output = -pid->maxOutput;
+
 
     pid->lastErr = pid->err;
 //    if(target == 0) pid->output = 0; // 刹车时直接输出0

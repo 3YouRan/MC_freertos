@@ -10,6 +10,7 @@ void my_init() {
     PS2_SetInit();
     //定时器中断初始化
     HAL_TIM_Base_Start_IT(&htim6);
+//    HAL_TIM_Base_Start_IT(&htim12);
     //电机控制PWM初始化
     HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_1);
     HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_2);

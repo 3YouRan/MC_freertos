@@ -9,9 +9,9 @@
 void UART6_Task(void *argument){
     while(1){
 
-        vTaskDelay(50);
+        vTaskDelay(100);
 
-        printf("%.2f\n\r",yaw_total);
+        printf("UART6:%.2f,%.2f,%.2f,%.2f,%.2f\n\r",Base_target_status.vx,Base_target_status.vy,Base_target_status.omega,servo1_angle,servo2_angle);
 
 
     }

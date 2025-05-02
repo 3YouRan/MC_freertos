@@ -120,8 +120,9 @@ extern LowPassFilter filter_yaw;
 
 extern float servo1_angle;
 extern float servo2_angle;
-extern Base_status_t Base_status;
-
+extern Base_status_t Base_target_status;
+extern OdometryState_t Base_odometry;
+extern uint8_t UART_num;
 ////IRQ.c，Init.c中函数的声明
 void my_init();
 void Set_Target_UartInit();

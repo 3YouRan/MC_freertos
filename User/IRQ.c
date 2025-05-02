@@ -7,13 +7,13 @@
 uint16_t RxLine = 0;//指令长度
 uint8_t RxBuffer[1];//串口接收缓冲
 uint8_t DataBuff[200];//指令内容
-
+uint8_t UART_num = 0;
 // UART接收完成回调函数
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
 
     if (huart->Instance == USART2) {
-
+        UART_num=2;
         RxLine++;                            // 接收行数加1
         DataBuff[RxLine-1]=RxBuffer[0];       // 将接收到的数据存入缓冲区
         if(RxBuffer[0]=='!')                  // 判断是否接收到感叹号
@@ -21,7 +21,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
             printf("RXLen=%d\r\n",RxLine);
             for(int i=0;i<RxLine;i++)
                 printf("UART DataBuff[%d] = %c\r\n",i,DataBuff[i]);
-            USART_PID_Adjust(1);             // 调整USART PID
+            USART_PID_Adjust(1,DataBuff);             // 调整USART PID
 
             memset(DataBuff,0,sizeof(DataBuff));   // 清空接收缓冲区
             RxLine=0;                           // 接收行数清零
@@ -29,6 +29,25 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
         RxBuffer[0]=0;                        // 重置接收缓冲区
 
         HAL_UART_Receive_IT(&huart2, (uint8_t *)RxBuffer, 1);   // 重新启动UART接收中断
+    }
+    if (huart->Instance == USART3) {
+        UART_num=3;
+        RxLine_UP++;                            // 接收行数加1
+        DataBuff_UP[RxLine_UP-1]=RxBuffer_UP[0];       // 将接收到的数据存入缓冲区
+        if(RxBuffer_UP[0]=='!')                  // 判断是否接收到感叹号
+        {
+            printf("RXLen_UP=%d\r\n",RxLine_UP);
+            for(int i=0;i<RxLine_UP;i++)
+                printf("UART DataBuff_UP[%d] = %c\r\n",i,DataBuff_UP[i]);
+            USART_PID_Adjust(1,DataBuff_UP);             // 调整USART PID
+
+
+            memset(DataBuff_UP,0,sizeof(DataBuff_UP));   // 清空接收缓冲区
+            RxLine_UP=0;                           // 接收行数清零
+        }
+        RxBuffer_UP[0]=0;                        // 重置接收缓冲区
+
+        HAL_UART_Receive_IT(&huart3, (uint8_t *)RxBuffer_UP, 1);   // 重新启动UART接收中断
     }
 }
 
@@ -106,7 +125,7 @@ float Target_Angle_Inc=1.5f;
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
     /* USER CODE BEGIN Callback 0 */
-
+    //calculate_odometry(motorA.speed,motorB.speed,motorC.speed,motorD.speed,&Base_odometry,0.002f);
     if (htim==&htim6){// 2ms
         times1++;
         encoder_now1=(short )(__HAL_TIM_GET_COUNTER(ENCODER1));
@@ -121,55 +140,63 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
         __HAL_TIM_SET_COUNTER(ENCODER2,0);
         __HAL_TIM_SET_COUNTER(ENCODER3,0);
         __HAL_TIM_SET_COUNTER(ENCODER4,0);
-        motorA.speed=(float )encoder_now1/(4*30*500)*1000*60;
-        motorB.speed=(float )encoder_now2/(4*30*500)*1000*60; //rpm
-        motorC.speed=(float )encoder_now3/(4*30*500)*1000*60;
-        motorD.speed=(float )encoder_now4/(4*30*500)*1000*60;
-        if(times1==10){
+        motorA.speed=(float )encoder_now1/(4*28*500)*500*60;
+        motorB.speed=-(float )encoder_now2/(4*28*500)*500*60; //rpm
+        motorC.speed=(float )encoder_now3/(4*28*500)*500*60;
+        motorD.speed=-(float )encoder_now4/(4*30*500)*500*60;
+//        if(times1==5){//10ms
+//            calculate_odometry(motorA.speed,motorB.speed,motorC.speed,motorD.speed,&Base_odometry,0.01f);
+//        }
+        if(times1==10){//20ms
             times1=0;
             //目标速度爬坡
-            if (Target_Speed_A_Now<Target_Speed_A){
-                Target_Speed_A_Now+=Target_Speed_Inc;
-            }else if(Target_Speed_A_Now>Target_Speed_A){
-                Target_Speed_A_Now-=Target_Speed_Inc;
-            }else if(fabsf(Target_Speed_A_Now-Target_Speed_A)<Target_Speed_Inc){
-                Target_Speed_A_Now=Target_Speed_A;
+            if (motorA.TargetSpeed_now<motorA.TargetSpeed){
+                motorA.TargetSpeed_now+=Target_Speed_Inc;
+            }else if(motorA.TargetSpeed_now>motorA.TargetSpeed){
+                motorA.TargetSpeed_now-=Target_Speed_Inc;
+            }else if(fabsf(motorA.TargetSpeed_now-motorA.TargetSpeed)<Target_Speed_Inc){
+                motorA.TargetSpeed_now=motorA.TargetSpeed;
             }
-            if (Target_Speed_B_Now<Target_Speed_B){
-                Target_Speed_B_Now+=Target_Speed_Inc;
-            }else if(Target_Speed_B_Now>Target_Speed_B){
-                Target_Speed_B_Now-=Target_Speed_Inc;
-            } else if(fabsf(Target_Speed_B_Now-Target_Speed_B)<Target_Speed_Inc){
-                Target_Speed_B_Now=Target_Speed_B;
+            if (motorB.TargetSpeed_now<motorB.TargetSpeed){
+                motorB.TargetSpeed_now+=Target_Speed_Inc;
+            }else if(motorB.TargetSpeed_now>motorB.TargetSpeed){
+                motorB.TargetSpeed_now-=Target_Speed_Inc;
+            } else if(fabsf(motorB.TargetSpeed_now-motorB.TargetSpeed)<Target_Speed_Inc){
+                motorB.TargetSpeed_now=motorB.TargetSpeed;
             }
-            if (Target_Speed_C_Now<Target_Speed_C){
-                Target_Speed_C_Now+=Target_Speed_Inc;
-            }else if(Target_Speed_C_Now>Target_Speed_C){
-                Target_Speed_C_Now-=Target_Speed_Inc;
-            }else if(fabsf(Target_Speed_C_Now-Target_Speed_C)<Target_Speed_Inc){
-                Target_Speed_C_Now=Target_Speed_C;
+            if (motorC.TargetSpeed_now<motorC.TargetSpeed){
+                motorC.TargetSpeed_now+=Target_Speed_Inc;
+            }else if(motorC.TargetSpeed_now>motorC.TargetSpeed){
+                motorC.TargetSpeed_now-=Target_Speed_Inc;
+            }else if(fabsf(motorC.TargetSpeed_now-motorC.TargetSpeed)<Target_Speed_Inc){
+                motorC.TargetSpeed_now=motorC.TargetSpeed;
             }
-            if (Target_Speed_D_Now<Target_Speed_D){
-                Target_Speed_D_Now+=Target_Speed_Inc;
-            }else if(Target_Speed_D_Now>Target_Speed_D){
-                Target_Speed_D_Now-=Target_Speed_Inc;
-            } else if(fabsf(Target_Speed_D_Now-Target_Speed_D)<Target_Speed_Inc){
-                Target_Speed_D_Now=Target_Speed_D;
+            if (motorD.TargetSpeed_now<motorD.TargetSpeed){
+                motorD.TargetSpeed_now+=Target_Speed_Inc;
+            }else if(motorD.TargetSpeed_now>motorD.TargetSpeed){
+                motorD.TargetSpeed_now-=Target_Speed_Inc;
+            } else if(fabsf(motorD.TargetSpeed_now-motorD.TargetSpeed)<Target_Speed_Inc){
+                motorD.TargetSpeed_now=motorD.TargetSpeed;
             }
             //目标角度爬坡
-            if(Target_Angle_actual-Target_Angle>Target_Speed_Inc){
+            if(Target_Angle_actual-Target_Angle>Target_Angle_Inc){
                 Target_Angle_actual-=Target_Angle_Inc;
-            }else if(Target_Angle_actual-Target_Angle<-Target_Speed_Inc){
+            }else if(Target_Angle_actual-Target_Angle<-Target_Angle_Inc){
                 Target_Angle_actual+=Target_Angle_Inc;
             }else if(fabsf(Target_Angle_actual-Target_Angle)<Target_Angle_Inc){
                 Target_Angle_actual=Target_Angle;
             }
         }
     }
+//    if (htim->Instance == TIM12) {//1ms
+//
+//
+//    }
     /* USER CODE END Callback 0 */
     if (htim->Instance == TIM7) {
         HAL_IncTick();
     }
+
     /* USER CODE BEGIN Callback 1 */
 
     /* USER CODE END Callback 1 */

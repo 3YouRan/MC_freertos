@@ -118,6 +118,7 @@ int main(void)
   MX_TIM8_Init();
   MX_USART1_UART_Init();
   MX_I2C2_Init();
+  MX_TIM12_Init();
   MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
   my_init();
@@ -139,6 +140,8 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+      printf("Hello World\n\r");
+      HAL_Delay(100);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

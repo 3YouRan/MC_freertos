@@ -27,6 +27,8 @@ typedef struct motor{
     int16_t overflowNum; //溢出次数
     float speed;         //电机转速
     uint8_t direct;      //旋转方向
+    float TargetSpeed;   //目标转速
+    float TargetSpeed_now; //当前目标转速
 }motor;
 
 

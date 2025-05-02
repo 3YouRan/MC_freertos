@@ -78,8 +78,8 @@ const osThreadAttr_t defaultTask_attributes = {
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
-void UART6_Task(void *argument);
-void IMU_Task(void *argument);
+
+
 /* USER CODE END FunctionPrototypes */
 
 void StartDefaultTask(void *argument);
@@ -112,7 +112,6 @@ void MX_FREERTOS_Init(void) {
 
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
-  g_xPS2QueueHandle= xQueueCreate(10,sizeof(uint8_t));
   /* USER CODE END RTOS_QUEUES */
 
   /* Create the thread(s) */
@@ -123,12 +122,12 @@ void MX_FREERTOS_Init(void) {
   /* add threads, ... */
   //底层任务
   xTaskCreate(UART6_Task,"UART6_Task",128,NULL,osPriorityNormal-1,&g_xUart6TaskHandle);
-  xTaskCreate(Base_Control,"Base_Control",128,NULL,osPriorityNormal,&g_xBaseControlTaskHandle);
-  xTaskCreate(PS2_Task,"PS2_Task",128,NULL,osPriorityNormal,&g_xPS2TaskHandle);
-  xTaskCreate(IMU_Task, "IMU_Task", 128, NULL, osPriorityNormal+1, &g_xIM600TaskHandle);
-  xTaskCreate(PID_Task,"PID_Task",128,NULL,osPriorityNormal+5,&g_xPIDTaskHandle);
-  xTaskCreate(OLED_Task,"OLED_Task",128,NULL,osPriorityNormal-1,&g_xOLEDTaskHandle);
-  xTaskCreate(pan_tile_task,"PAN_tile_Task",128,NULL,osPriorityNormal,&g_xPAN_tileTaskHandle);
+  xTaskCreate(Base_Control,"Base_Control",256,NULL,osPriorityNormal,&g_xBaseControlTaskHandle);
+//  xTaskCreate(PS2_Task,"PS2_Task",128,NULL,osPriorityNormal,&g_xPS2TaskHandle);
+//  xTaskCreate(IMU_Task, "IMU_Task", 128, NULL, osPriorityNormal+1, &g_xIM600TaskHandle);
+  xTaskCreate(PID_Task,"PID_Task",512,NULL,osPriorityNormal+1,&g_xPIDTaskHandle);
+  xTaskCreate(OLED_Task,"OLED_Task",256,NULL,osPriorityNormal-1,&g_xOLEDTaskHandle);
+  xTaskCreate(pan_tile_task,"PAN_tile_Task",256,NULL,osPriorityNormal,&g_xPAN_tileTaskHandle);
 
     //  xTimerStart(g_xTimerPIDHandle,0);
   /* USER CODE END RTOS_THREADS */

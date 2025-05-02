@@ -3,7 +3,7 @@
 
 #include "all.h"
 extern uint8_t RxBuffer[1];//串口接收缓冲
-extern uint8_t DataBuff[200];//指令内容
+extern uint8_t Databuff[200];//指令内容
 extern PID pid_speed_A;
 extern PID pid_position_A;
 extern PID pid_angle;
@@ -69,32 +69,47 @@ float Get_Data(uint8_t* Data_Usart)
 /*
  * 根据串口信息进行PID调参
  */
-void USART_PID_Adjust(uint8_t Motor_n)
+void USART_PID_Adjust(uint8_t Motor_n,uint8_t *Data_buff)
 {
-    float data_Get = Get_Data(DataBuff); // 存放接收到的数据
+    float data_Get = Get_Data(Data_buff); // 存放接收到的数据
 //    printf("data=%.2f\r\n",data_Get);
     if(Motor_n == 1)//左边电机
     {
-        if(DataBuff[0]=='P' && DataBuff[1]=='1') // 位置环P
+        if(Data_buff[0]=='P' && Data_buff[1]=='1') // 位置环P
             pid_angle.kp = data_Get;
-        else if(DataBuff[0]=='I' && DataBuff[1]=='1') // 位置环I
+        else if(Data_buff[0]=='I' && Data_buff[1]=='1') // 位置环I
             pid_angle.ki = data_Get;
-        else if(DataBuff[0]=='D' && DataBuff[1]=='1') // 位置环D
+        else if(Data_buff[0]=='D' && Data_buff[1]=='1') // 位置环D
             pid_angle.kd = data_Get;
-        else if(DataBuff[0]=='P' && DataBuff[1]=='2') // 速度环P
+        else if(Data_buff[0]=='P' && Data_buff[1]=='2') // 速度环P
             pid_speed_A.kp = data_Get;
-        else if(DataBuff[0]=='I' && DataBuff[1]=='2') // 速度环I
+        else if(Data_buff[0]=='I' && Data_buff[1]=='2') // 速度环I
             pid_speed_A.ki = data_Get;
-        else if(DataBuff[0]=='D' && DataBuff[1]=='2') // 速度环D
+        else if(Data_buff[0]=='D' && Data_buff[1]=='2') // 速度环D
             pid_speed_A.kd = data_Get;
-        else if((DataBuff[0]=='S' && DataBuff[1]=='p') && DataBuff[2]=='e') //目标速度
+        else if((Data_buff[0]=='S' && Data_buff[1]=='p') && Data_buff[2]=='e') //目标速度
             servo2_angle = data_Get;
-        else if((DataBuff[0]=='P' && DataBuff[1]=='o') && DataBuff[2]=='s') //目标位置
+        else if((Data_buff[0]=='P' && Data_buff[1]=='o') && Data_buff[2]=='s') //目标位置
             servo1_angle = data_Get;
-        else if(DataBuff[0]=='R' && DataBuff[1]=='C'){
-            if (sscanf(DataBuff, "RC=%d,%d", &L_TICK[0], &L_TICK[1]) == 2) {
+        else if(Data_buff[0]=='R' && Data_buff[1]=='C'){
+            if (sscanf(Data_buff, "RC=%d,%d", &L_TICK[0], &L_TICK[1]) == 2) {
                 printf("解析结果：%d 和 %d\n", L_TICK[0], L_TICK[1]);
             } else {
+                printf("格式错误\n");
+            }
+
+        }
+        else if(Data_buff[0]=='P' && Data_buff[1]=='G'){//PG vx,vy,angle  !
+            if(sscanf(Data_buff, "PG%f,%f,%f!", &Base_target_status.vx,&Base_target_status.vy, &Base_target_status.theta) == 3){
+                printf("解析结果：%.2f, %.2f, %.2f\n", Base_target_status.vx, Base_target_status.vy, Base_target_status.theta);
+            }else{
+                printf("格式错误\n");
+            }
+        }
+        else if(Data_buff[0]=='S' && Data_buff[1]=='R'){//SR servo1_angle,servo2_angle !
+            if(sscanf(Data_buff, "SR%f,%f!", &servo1_angle,&servo2_angle) == 2){
+                printf("解析结果：%.2f, %.2f\n", servo1_angle, servo2_angle);
+            }else{
                 printf("格式错误\n");
             }
         }
@@ -102,21 +117,21 @@ void USART_PID_Adjust(uint8_t Motor_n)
     }
 //    else if(Motor_n == 0) // 右边电机
 //    {
-//        if(DataBuff[0]=='P' && DataBuff[1]=='1') // 位置环P
+//        if(Data_buff[0]=='P' && Data_buff[1]=='1') // 位置环P
 //            pid_r_position.kp = data_Get;
-//        else if(DataBuff[0]=='I' && DataBuff[1]=='1') // 位置环I
+//        else if(Data_buff[0]=='I' && Data_buff[1]=='1') // 位置环I
 //            pid_r_position.ki = data_Get;
-//        else if(DataBuff[0]=='D' && DataBuff[1]=='1') // 位置环D
+//        else if(Data_buff[0]=='D' && Data_buff[1]=='1') // 位置环D
 //            pid_r_position.kd = data_Get;
-//        else if(DataBuff[0]=='P' && DataBuff[1]=='2') // 速度环P
+//        else if(Data_buff[0]=='P' && Data_buff[1]=='2') // 速度环P
 //            pid_r_speed.kp = data_Get;
-//        else if(DataBuff[0]=='I' && DataBuff[1]=='2') // 速度环I
+//        else if(Data_buff[0]=='I' && Data_buff[1]=='2') // 速度环I
 //            pid_r_speed.ki = data_Get;
-//        else if(DataBuff[0]=='D' && DataBuff[1]=='2') // 速度环D
+//        else if(Data_buff[0]=='D' && Data_buff[1]=='2') // 速度环D
 //            pid_r_speed.kd = data_Get;
-//        else if((DataBuff[0]=='S' && DataBuff[1]=='p') && DataBuff[2]=='e') //目标速度
+//        else if((Data_buff[0]=='S' && Data_buff[1]=='p') && Data_buff[2]=='e') //目标速度
 //            R_Target_Speed = data_Get;
-//        else if((DataBuff[0]=='P' && DataBuff[1]=='o') && DataBuff[2]=='s') //目标位置
+//        else if((Data_buff[0]=='P' && Data_buff[1]=='o') && Data_buff[2]=='s') //目标位置
 //            R_Target_Position = data_Get;
 //    }
 }

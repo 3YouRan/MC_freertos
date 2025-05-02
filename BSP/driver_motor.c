@@ -20,24 +20,28 @@ void motor_init(){
     motorA.direct=0;
     motorA.lastCount=0;
     motorA.overflowNum=0;
+    motorA.TargetSpeed=0;
 
     motorB.totalCount=0;
     motorB.speed=0;
     motorB.direct=0;
     motorB.lastCount=0;
     motorB.overflowNum=0;
+    motorB.TargetSpeed=0;
 
     motorC.totalCount=0;
     motorC.speed=0;
     motorC.direct=0;
     motorC.lastCount=0;
     motorC.overflowNum=0;
+    motorC.TargetSpeed=0;
 
     motorD.totalCount=0;
     motorD.speed=0;
     motorD.direct=0;
     motorD.lastCount=0;
     motorD.overflowNum=0;
+    motorD.TargetSpeed=0;
 }
 
 void motorA_run(int speed){
@@ -56,13 +60,13 @@ void motorA_run(int speed){
 void motorB_run(int speed){
 
     if (speed>0){
-        PWMB1_SET(speed);
-        PWMB2_SET(0);
+        PWMB2_SET(speed);
+        PWMB1_SET(0);
 
     }
     else if (speed<0){
-        PWMB1_SET(0);
-        PWMB2_SET(-speed);
+        PWMB2_SET(0);
+        PWMB1_SET(-speed);
     }else{
         PWMB1_SET(0);
         PWMB2_SET(0);
@@ -86,12 +90,12 @@ void motorC_run(int speed){
 }
 void motorD_run(int speed){
     if (speed>0){
-        PWMD1_SET(0);
-        PWMD2_SET(speed);
+        PWMD2_SET(0);
+        PWMD1_SET(speed);
     }
     else if (speed<0){
-       PWMD1_SET(-speed);
-        PWMD2_SET(0);
+       PWMD2_SET(-speed);
+        PWMD1_SET(0);
     }else{
         PWMD1_SET(0);
         PWMD2_SET(0);

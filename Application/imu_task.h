@@ -6,5 +6,4 @@
 #define MC_PROJ_IMU_TASK_H
 
 void IMU_Task(void *argument);
-
 #endif //MC_PROJ_IMU_TASK_H
