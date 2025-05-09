@@ -83,9 +83,17 @@ void DMA_UartIdleCallback(UART_HandleTypeDef *huart)//注意一个问题，调用的时候再
 
     //计算接收到的数据长度，接收到的数据长度等于数组的最大存储长度减去DMA空闲的数据区长度
     uint8_t data_length  = DEBUG_RV_MXSIZE - __HAL_DMA_GET_COUNTER(huart->hdmarx);
+    switch(debugRvAll[1]){
+        case 0x53:
+            memcpy(&stcAngle,&debugRvAll[2],8);
+            break;
+        case 0x51:
+            memcpy(&stcAcc,&debugRvAll[2],8);
 
-    memcpy(&stcAngle,&debugRvAll[2],8);
-
+            break;
+    }
+//    memcpy(&stcAngle,&debugRvAll[2],8);
+//    printf("IRQ: %x\r\n",debugRvAll[1]);
     yaw_last = yaw;
     yaw = (float) stcAngle.Angle[2] / 32768 * 180;
     if (yaw - yaw_last > 180) {//处理过零误差
@@ -144,9 +152,23 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
         motorB.speed=-(float )encoder_now2/(4*28*500)*500*60; //rpm
         motorC.speed=(float )encoder_now3/(4*28*500)*500*60;
         motorD.speed=-(float )encoder_now4/(4*30*500)*500*60;
-//        if(times1==5){//10ms
-//            calculate_odometry(motorA.speed,motorB.speed,motorC.speed,motorD.speed,&Base_odometry,0.01f);
-//        }
+        if(times1==5){//10ms
+            // 转换IMU加速度到全局坐标系
+            float a_global[2];
+            imu_to_global(stcAcc.a[0]/32768*16*G, stcAcc.a[1]/32768*16*G, yaw_total, &a_global[0], &a_global[1]);
+
+            // 预测步骤
+            kalman_predict(&kf, a_global);
+
+            // 更新步骤
+            float z[] = {Base_odometry.x, Base_odometry.y,};
+            kalman_update(&kf, z);
+
+            // 输出结果
+//            printf("Estimated Position: (%.2f, %.2f)\n",
+//                   kf.x[0], kf.x[1]);
+            calculate_odometry(motorA.speed,motorB.speed,motorC.speed,motorD.speed,&Base_odometry,0.01f);
+        }
         if(times1==10){//20ms
             times1=0;
             //目标速度爬坡

@@ -115,7 +115,7 @@ extern struct SPress 	stcPress;
 extern struct SLonLat 	stcLonLat;
 extern struct SGPSV    stcGPSV;
 extern struct SQ       stcQ;
-
+extern uint8_t debugRvAll[DEBUG_RV_MXSIZE];
 extern LowPassFilter filter_yaw;
 
 extern float servo1_angle;
@@ -123,6 +123,7 @@ extern float servo2_angle;
 extern Base_status_t Base_target_status;
 extern OdometryState_t Base_odometry;
 extern uint8_t UART_num;
+extern KalmanFilter kf;
 ////IRQ.c，Init.c中函数的声明
 void my_init();
 void Set_Target_UartInit();

@@ -24,65 +24,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dfe52881-99c5-4ca4-8dc3-76309cb8ceb8" name="更改" comment="整理工程结构">
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Application/base_task.c" beforeDir="false" afterPath="$PROJECT_DIR$/Application/base_task.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Application/base_task.h" beforeDir="false" afterPath="$PROJECT_DIR$/Application/base_task.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Application/imu_task.h" beforeDir="false" afterPath="$PROJECT_DIR$/Application/imu_task.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Application/oled_task.c" beforeDir="false" afterPath="$PROJECT_DIR$/Application/oled_task.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Application/pid_task.c" beforeDir="false" afterPath="$PROJECT_DIR$/Application/pid_task.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Application/uart_task.c" beforeDir="false" afterPath="$PROJECT_DIR$/Application/uart_task.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Application/uart_task.h" beforeDir="false" afterPath="$PROJECT_DIR$/Application/uart_task.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BSP/driver_motor.c" beforeDir="false" afterPath="$PROJECT_DIR$/BSP/driver_motor.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BSP/driver_motor.h" beforeDir="false" afterPath="$PROJECT_DIR$/BSP/driver_motor.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/PID_Adjust.c" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/PID_Adjust.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/PID_Adjust.h" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/PID_Adjust.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/PID_Control.c" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/PID_Control.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Core/Inc/tim.h" beforeDir="false" afterPath="$PROJECT_DIR$/Core/Inc/tim.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Core/Src/freertos.c" beforeDir="false" afterPath="$PROJECT_DIR$/Core/Src/freertos.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Core/Src/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/Core/Src/main.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Core/Src/stm32f4xx_it.c" beforeDir="false" afterPath="$PROJECT_DIR$/Core/Src/stm32f4xx_it.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Core/Src/tim.c" beforeDir="false" afterPath="$PROJECT_DIR$/Core/Src/tim.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Core/Src/usart.c" beforeDir="false" afterPath="$PROJECT_DIR$/Core/Src/usart.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MC_Proj.ioc" beforeDir="false" afterPath="$PROJECT_DIR$/MC_Proj.ioc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/User/IRQ.c" beforeDir="false" afterPath="$PROJECT_DIR$/User/IRQ.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/User/Init.c" beforeDir="false" afterPath="$PROJECT_DIR$/User/Init.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/User/all.h" beforeDir="false" afterPath="$PROJECT_DIR$/User/all.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cfg/my dap f4.cfg" beforeDir="false" afterPath="$PROJECT_DIR$/cfg/my dap f4.cfg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/reply/cmakeFiles-v1-0afc40540a886d3a12ac.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/reply/index-2025-04-21T09-52-38-0028.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.28.1/CMakeDetermineCompilerABI_C.bin" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.28.1/CMakeDetermineCompilerABI_C.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.28.1/CMakeDetermineCompilerABI_CXX.bin" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.28.1/CMakeDetermineCompilerABI_CXX.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeConfigureLog.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeConfigureLog.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MC_Proj.elf.dir/Application/PS2_task.c.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MC_Proj.elf.dir/Application/PS2_task.c.obj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MC_Proj.elf.dir/Application/base_task.c.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MC_Proj.elf.dir/Application/base_task.c.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MC_Proj.elf.dir/Application/imu_task.c.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MC_Proj.elf.dir/Application/imu_task.c.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MC_Proj.elf.dir/Application/oled_task.c.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MC_Proj.elf.dir/Application/oled_task.c.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MC_Proj.elf.dir/Application/pan_tile_task.c.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MC_Proj.elf.dir/Application/pan_tile_task.c.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MC_Proj.elf.dir/Application/pid_task.c.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MC_Proj.elf.dir/Application/pid_task.c.obj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MC_Proj.elf.dir/Application/uart_task.c.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MC_Proj.elf.dir/Application/uart_task.c.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MC_Proj.elf.dir/BSP/HWT906.c.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MC_Proj.elf.dir/BSP/HWT906.c.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MC_Proj.elf.dir/BSP/PS2.c.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MC_Proj.elf.dir/BSP/PS2.c.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MC_Proj.elf.dir/BSP/driver_motor.c.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MC_Proj.elf.dir/BSP/driver_motor.c.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MC_Proj.elf.dir/BSP/oled.c.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MC_Proj.elf.dir/BSP/oled.c.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MC_Proj.elf.dir/Controller/PID_Adjust.c.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MC_Proj.elf.dir/Controller/PID_Adjust.c.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MC_Proj.elf.dir/Controller/PID_Control.c.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MC_Proj.elf.dir/Controller/PID_Control.c.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MC_Proj.elf.dir/Core/Src/freertos.c.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MC_Proj.elf.dir/Core/Src/freertos.c.obj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MC_Proj.elf.dir/Core/Src/main.c.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MC_Proj.elf.dir/Core/Src/main.c.obj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MC_Proj.elf.dir/Core/Src/stm32f4xx_it.c.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MC_Proj.elf.dir/Core/Src/stm32f4xx_it.c.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MC_Proj.elf.dir/Core/Src/tim.c.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MC_Proj.elf.dir/Core/Src/tim.c.obj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MC_Proj.elf.dir/User/IRQ.c.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MC_Proj.elf.dir/User/IRQ.c.obj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MC_Proj.elf.dir/User/Init.c.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MC_Proj.elf.dir/User/Init.c.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MC_Proj.elf.dir/User/Kinematic_Analysis.c.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MC_Proj.elf.dir/User/debug.c.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MC_Proj.elf.dir/User/filter.c.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MC_Proj.elf.dir/User/filter.c.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-Debug-log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-Debug-log.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/MC_Proj.bin" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/MC_Proj.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/MC_Proj.elf" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/MC_Proj.elf" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/MC_Proj.hex" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/MC_Proj.hex" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/MC_Proj.map" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/MC_Proj.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/build.ninja" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/build.ninja" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -211,7 +172,11 @@
       <workItem from="1746097454401" duration="8000" />
       <workItem from="1746104273768" duration="725000" />
       <workItem from="1746105653757" duration="3679000" />
-      <workItem from="1746148883355" duration="4000" />
+      <workItem from="1746148883355" duration="10436000" />
+      <workItem from="1746323228221" duration="9000" />
+      <workItem from="1746779174985" duration="862000" />
+      <workItem from="1746781025042" duration="11000" />
+      <workItem from="1746799901867" duration="962000" />
     </task>
     <task id="LOCAL-00001" summary="version1.0 未使用队列,信号量">
       <option name="closed" value="true" />
@@ -301,7 +266,15 @@
       <option name="project" value="LOCAL" />
       <updated>1745229553013</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="整理工程结构">
+      <option name="closed" value="true" />
+      <created>1746149072421</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1746149072421</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

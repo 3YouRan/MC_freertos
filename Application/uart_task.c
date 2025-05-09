@@ -11,8 +11,10 @@ void UART6_Task(void *argument){
 
         vTaskDelay(100);
 
-        printf("UART6:%.2f,%.2f,%.2f,%.2f,%.2f\n\r",Base_target_status.vx,Base_target_status.vy,Base_target_status.omega,servo1_angle,servo2_angle);
+//        printf("UART6:%.2f,%.2f,%.2f,%.2f,%.2f\n\r",Base_target_status.vx,Base_target_status.vy,Base_target_status.omega,servo1_angle,servo2_angle);
+        printf("Acc:%.3f %.3f %.3f\r\n",(float)stcAcc.a[0]/32768*16,(float)stcAcc.a[1]/32768*16,(float)stcAcc.a[2]/32768*16);
+        printf("Angle:%.2f\r\n",yaw);
 
-
+//
     }
 }
