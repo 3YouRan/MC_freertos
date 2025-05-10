@@ -124,8 +124,8 @@ void MX_FREERTOS_Init(void) {
   xTaskCreate(UART6_Task,"UART6_Task",128,NULL,osPriorityNormal-1,&g_xUart6TaskHandle);
   xTaskCreate(Base_Control,"Base_Control",256,NULL,osPriorityNormal,&g_xBaseControlTaskHandle);
 //  xTaskCreate(PS2_Task,"PS2_Task",128,NULL,osPriorityNormal,&g_xPS2TaskHandle);
-//  xTaskCreate(IMU_Task, "IMU_Task", 128, NULL, osPriorityNormal+1, &g_xIM600TaskHandle);
-  xTaskCreate(PID_Task,"PID_Task",512,NULL,osPriorityNormal+1,&g_xPIDTaskHandle);
+//  xTaskCreate(IMU_Task, "IMU_Task", 512, NULL, osPriorityNormal+2, &g_xIM600TaskHandle);
+  xTaskCreate(PID_Task,"PID_Task",512,NULL,osPriorityNormal+3,&g_xPIDTaskHandle);
   xTaskCreate(OLED_Task,"OLED_Task",256,NULL,osPriorityNormal-1,&g_xOLEDTaskHandle);
   xTaskCreate(pan_tile_task,"PAN_tile_Task",256,NULL,osPriorityNormal,&g_xPAN_tileTaskHandle);
 

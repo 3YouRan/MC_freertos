@@ -22,7 +22,7 @@ struct_Ram_Uart Uart;
 int UART_Write(uint8_t n, uint8_t *buf, int Len)
 {
 
-    HAL_UART_Transmit(&huart2, buf, Len, 1000);
+    HAL_UART_Transmit(&huart6, buf, Len, 1000);
     return Len;
 }
 

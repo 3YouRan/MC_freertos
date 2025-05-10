@@ -5,6 +5,9 @@
 #ifndef MC_PROJ_ALL_H
 #define MC_PROJ_ALL_H
 //// 头文件包含
+#include <stdarg.h>
+#include <stdio.h>
+#include "stdlib.h"
 #include "main.h"
 #include "base_task.h"
 #include "FreeRTOS.h"
@@ -129,6 +132,6 @@ void my_init();
 void Set_Target_UartInit();
 void DMA_UartIrqHandler(UART_HandleTypeDef *huart);
 void DMA_UartIdleCallback(UART_HandleTypeDef *huart);//注意一个问题，调用的时候再写&huart6，否则在这个函数里会出问题
-
+void usart_printf(const char* format, ...);
 
 #endif //MC_PROJ_ALL_H

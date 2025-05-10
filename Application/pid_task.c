@@ -18,7 +18,7 @@ void PID_Task(void *argument){
             if (pid_delay >= 200){// 500ms
                 pid_flag = 1;
             }
-        }else if(pid_flag == 1) {
+        }else if(pid_flag == 1&&Motor_Enable==1) {
             //电机速度PID控制
             INC_PID_Realize(&pid_speed_A, motorA.TargetSpeed, motorA.speed);
             INC_PID_Realize(&pid_speed_B, motorB.TargetSpeed, motorB.speed);

@@ -1,4 +1,4 @@
--/******************************************************************************
+/******************************************************************************
                         设备与IM948模块之间的串口通信库
 版本: V1.03
 记录: 1、增加 加速计和陀螺仪量程可设置
@@ -7,11 +7,8 @@
       4、增加 设置静止节能模式的触发时长
 *******************************************************************************/
 #include "im948_CMD.h"
-#include "../BSP/bsp_usart.h"
-extern float X_Car;
-extern float Y_Car;
-float angle_Car_last=0;
-float angle_Car_total=0;
+#include "bsp_usart.h"
+#include "all.h"
 U8 targetDeviceAddress=255; // 通信地址，设为0-254指定则设备地址，设为255则不指定设备(即广播), 当需要使用485总线形式通信时通过该参数选中要操作的设备，若仅仅是串口1对1通信设为广播地址255即可
 
 U8 CalcSum1(U8 *Buf, int Len)
@@ -172,7 +169,6 @@ U8 Cmd_GetPkt(U8 byte)
 //                    Dbp_U8_buf("rx: ", "\r\n",
 //                               "%02X ",
 //                               buf, i);
-
                     Cmd_RxUnpack(&buf[3], i-5); // 处理数据包的数据体
                     return 1;
                 }
@@ -200,7 +196,7 @@ void Cmd_02(void)
 void Cmd_03(void)
 {
     U8 buf[1] = {0x03};
-//    Dbp("\r\nsensor on--\r\n");
+    Dbp("\r\nsensor on--\r\n");
     Cmd_PackAndTx(buf, 1);
 }
 // 关闭数据主动上报
@@ -214,7 +210,7 @@ void Cmd_18(void)
 void Cmd_19(void)
 {
     U8 buf[1] = {0x19};
-//    Dbp("\r\nauto report on--\r\n");
+    Dbp("\r\nauto report on--\r\n");
     Cmd_PackAndTx(buf, 1);
 }
 // 获取1次订阅的功能数据
@@ -257,7 +253,7 @@ void Cmd_12(U8 accStill, U8 stillToZero, U8 moveToZero,  U8 isCompassOn, U8 baro
     buf[8] = compassFilter;
     buf[9] = Cmd_ReportTag&0xff;
     buf[10] = (Cmd_ReportTag>>8)&0xff;
-//    Dbp("\r\nset parameters--\r\n");
+    Dbp("\r\nset parameters--\r\n");
     Cmd_PackAndTx(buf, 11);
 }
 // 惯导三维空间位置清零
@@ -344,7 +340,7 @@ void Cmd_04(void)
 void Cmd_05(void)
 {
     U8 buf[1] = {0x05};
-//    Dbp("\r\nz-axes to zero--\r\n");
+    Dbp("\r\nz-axes to zero--\r\n");
     Cmd_PackAndTx(buf, 1);
 }
 // xyz世界坐标系清零
@@ -622,24 +618,24 @@ static void Cmd_RxUnpack(U8 *buf, U8 DLen)
             Dbp("\t axesZ WorldXYZ-axes to zero success\r\n");
             break;
         case 0x10: // 模块当前的属性和状态 回复
-//            Dbp("\t still limit: %u\r\n", buf[1]);   // 字节1 惯导-静止状态加速度阀值 单位dm/s?
-//            Dbp("\t still to zero: %u\r\n", buf[2]); // 字节2 惯导-静止归零速度(单位mm/s) 0:不归零 255:立即归零
-//            Dbp("\t move to zero: %u\r\n", buf[3]);  // 字节3 惯导-动态归零速度(单位mm/s) 0:不归零
-//            Dbp("\t compass: %s\r\n", ((buf[4]>>0) & 0x01)? "on":"off" );     // 字节4 bit[0]: 1=已开启磁场 0=已关闭磁场
-//            Dbp("\t barometer filter: %u\r\n", (buf[4]>>1) & 0x03);           // 字节4 bit[1-2]: 气压计的滤波等级[取值0-3],数值越大越平稳但实时性越差
-//            Dbp("\t IMU: %s\r\n", ((buf[4]>>3) & 0x01)? "on":"off" );         // 字节4 bit[3]: 1=传感器已开启  0=传感器已睡眠
-//            Dbp("\t auto report: %s\r\n", ((buf[4]>>4) & 0x01)? "on":"off" ); // 字节4 bit[4]: 1=已开启传感器数据主动上报 0=已关闭传感器数据主动上报
-//            Dbp("\t FPS: %u\r\n", buf[5]); // 字节5 数据主动上报的传输帧率[取值0-250HZ], 0表示0.5HZ
-//            Dbp("\t gyro filter: %u\r\n", buf[6]);    // 字节6 陀螺仪滤波系数[取值0-2],数值越大越平稳但实时性越差
-//            Dbp("\t acc filter: %u\r\n", buf[7]);     // 字节7 加速计滤波系数[取值0-4],数值越大越平稳但实时性越差
-//            Dbp("\t compass filter: %u\r\n", buf[8]); // 字节8 磁力计滤波系数[取值0-9],数值越大越平稳但实时性越差
-//            Dbp("\t subscribe tag: 0x%04X\r\n", (U16)(((U16)buf[10]<<8) | buf[9])); // 字节[10-9] 功能订阅标识
-//            Dbp("\t charged state: %u\r\n", buf[11]); // 字节11 充电状态指示 0=未接电源 1=充电中 2=已充满
-//            Dbp("\t battery level: %u%%\r\n", buf[12]); // 字节12 当前剩余电量[0-100%]
-//            Dbp("\t battery voltage: %u mv\r\n", (U16)(((U16)buf[14]<<8) | buf[13])); // 字节[14-13] 电池的当前电压mv
-//            Dbp("\t Mac: %02X:%02X:%02X:%02X:%02X:%02X\r\n", buf[15],buf[16],buf[17],buf[18],buf[19],buf[20]); // 字节[15-20] MAC地址
-//            Dbp("\t version: %s\r\n", &buf[21]); // 字节[21-26] 固件版本 字符串
-//            Dbp("\t product model: %s\r\n", &buf[27]); // 字节[26-32] 产品型号 字符串
+            Dbp("\t still limit: %u\r\n", buf[1]);   // 字节1 惯导-静止状态加速度阀值 单位dm/s?
+            Dbp("\t still to zero: %u\r\n", buf[2]); // 字节2 惯导-静止归零速度(单位mm/s) 0:不归零 255:立即归零
+            Dbp("\t move to zero: %u\r\n", buf[3]);  // 字节3 惯导-动态归零速度(单位mm/s) 0:不归零
+            Dbp("\t compass: %s\r\n", ((buf[4]>>0) & 0x01)? "on":"off" );     // 字节4 bit[0]: 1=已开启磁场 0=已关闭磁场
+            Dbp("\t barometer filter: %u\r\n", (buf[4]>>1) & 0x03);           // 字节4 bit[1-2]: 气压计的滤波等级[取值0-3],数值越大越平稳但实时性越差
+            Dbp("\t IMU: %s\r\n", ((buf[4]>>3) & 0x01)? "on":"off" );         // 字节4 bit[3]: 1=传感器已开启  0=传感器已睡眠
+            Dbp("\t auto report: %s\r\n", ((buf[4]>>4) & 0x01)? "on":"off" ); // 字节4 bit[4]: 1=已开启传感器数据主动上报 0=已关闭传感器数据主动上报
+            Dbp("\t FPS: %u\r\n", buf[5]); // 字节5 数据主动上报的传输帧率[取值0-250HZ], 0表示0.5HZ
+            Dbp("\t gyro filter: %u\r\n", buf[6]);    // 字节6 陀螺仪滤波系数[取值0-2],数值越大越平稳但实时性越差
+            Dbp("\t acc filter: %u\r\n", buf[7]);     // 字节7 加速计滤波系数[取值0-4],数值越大越平稳但实时性越差
+            Dbp("\t compass filter: %u\r\n", buf[8]); // 字节8 磁力计滤波系数[取值0-9],数值越大越平稳但实时性越差
+            Dbp("\t subscribe tag: 0x%04X\r\n", (U16)(((U16)buf[10]<<8) | buf[9])); // 字节[10-9] 功能订阅标识
+            Dbp("\t charged state: %u\r\n", buf[11]); // 字节11 充电状态指示 0=未接电源 1=充电中 2=已充满
+            Dbp("\t battery level: %u%%\r\n", buf[12]); // 字节12 当前剩余电量[0-100%]
+            Dbp("\t battery voltage: %u mv\r\n", (U16)(((U16)buf[14]<<8) | buf[13])); // 字节[14-13] 电池的当前电压mv
+            Dbp("\t Mac: %02X:%02X:%02X:%02X:%02X:%02X\r\n", buf[15],buf[16],buf[17],buf[18],buf[19],buf[20]); // 字节[15-20] MAC地址
+            Dbp("\t version: %s\r\n", &buf[21]); // 字节[21-26] 固件版本 字符串
+            Dbp("\t product model: %s\r\n", &buf[27]); // 字节[26-32] 产品型号 字符串
             break;
         case 0x11: // 获取订阅的功能数据 回复或主动上报
             ctl = ((U16)buf[2] << 8) | buf[1];// 字节[2-1] 为功能订阅标识，指示当前订阅了哪些功能
@@ -698,24 +694,23 @@ static void Cmd_RxUnpack(U8 *buf, U8 DLen)
             {// 欧拉角xyz 使用时需*scaleAngle
                 tmpX = (S16)(((S16)buf[L+1]<<8) | buf[L]) * scaleAngle; L += 2; //Dbp("\tangleX: %.3f\r\n", tmpX); // x角度
                 tmpY = (S16)(((S16)buf[L+1]<<8) | buf[L]) * scaleAngle; L += 2; //Dbp("\tangleY: %.3f\r\n", tmpY); // y角度
-                tmpZ = (S16)(((S16)buf[L+1]<<8) | buf[L]) * scaleAngle; L += 2; //printf("\tangleZ: %.3f\r\n", tmpZ); // z角度
-                angle_Car_last=angle_Car;
-                angle_Car=tmpZ;
-                if(angle_Car-angle_Car_last>180){
-                    angle_Car_total+=(angle_Car-angle_Car_last)-360;
-                }else if(angle_Car-angle_Car_last<-180){
-                    angle_Car_total+=(angle_Car-angle_Car_last)+360;
+                tmpZ = (S16)(((S16)buf[L+1]<<8) | buf[L]) * scaleAngle; L += 2; //Dbp("\tangleZ: %.3f\r\n", tmpZ); // z角度
+                yaw_last = yaw;
+                yaw=tmpZ;
+                if(yaw-yaw_last>180){
+                    yaw_total+=yaw-yaw_last+360;
+                }else if(yaw-yaw_last<-180){
+                    yaw_total+=yaw-yaw_last-360;
                 }else{
-                    angle_Car_total+=angle_Car-angle_Car_last;
+                    yaw_total+=yaw-yaw_last;
                 }
+
             }
             if ((ctl & 0x0080) != 0)
             {// xyz 空间位移 单位mm 转为 m
-                tmpX = (S16)(((S16)buf[L+1]<<8) | buf[L]) / 1000.0f; L += 2;//Dbp("\toffsetX: %.3f\r\n", tmpX); // x坐标
-                tmpY = (S16)(((S16)buf[L+1]<<8) | buf[L]) / 1000.0f; L += 2;//Dbp("\toffsetY: %.3f\r\n", tmpY); // y坐标
-                tmpZ = (S16)(((S16)buf[L+1]<<8) | buf[L]) / 1000.0f; L += 2;//Dbp("\toffsetZ: %.3f\r\n", tmpZ); // z坐标
-
-
+                tmpX = (S16)(((S16)buf[L+1]<<8) | buf[L]) / 1000.0f; L += 2; Dbp("\toffsetX: %.3f\r\n", tmpX); // x坐标
+                tmpY = (S16)(((S16)buf[L+1]<<8) | buf[L]) / 1000.0f; L += 2; Dbp("\toffsetY: %.3f\r\n", tmpY); // y坐标
+                tmpZ = (S16)(((S16)buf[L+1]<<8) | buf[L]) / 1000.0f; L += 2; Dbp("\toffsetZ: %.3f\r\n", tmpZ); // z坐标
             }
             if ((ctl & 0x0100) != 0)
             {// 活动检测数据
@@ -881,9 +876,9 @@ static void Cmd_Write(U8 *pBuf, int Len)
     // 通过UART_Write函数发送通信数据流，由用户针对底层硬件实现UART_Write函数把buf指针指向的Len字节数据发送出去即可
     UART_Write(3,  pBuf, Len);
 
-//    Dbp_U8_buf("tx: ", "\r\n",
-//               "%02X ",
-//               pBuf, Len);
+    Dbp_U8_buf("tx: ", "\r\n",
+               "%02X ",
+               pBuf, Len);
 }
 
 

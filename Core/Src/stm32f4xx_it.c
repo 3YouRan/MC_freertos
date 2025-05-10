@@ -415,7 +415,7 @@ void DMA2_Stream6_IRQHandler(void)
   /* USER CODE END DMA2_Stream6_IRQn 0 */
   HAL_DMA_IRQHandler(&hdma_usart6_tx);
   /* USER CODE BEGIN DMA2_Stream6_IRQn 1 */
-
+    DMA_UartIrqHandler(&huart6);
   /* USER CODE END DMA2_Stream6_IRQn 1 */
 }
 
