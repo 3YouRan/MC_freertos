@@ -9,6 +9,7 @@ OdometryState_t Base_odometry;//底盘里程计
 uint8_t mode_flag = SLAVE_MODE;
 uint8_t delay_times = 0;
 uint8_t delay_flag = 0;
+float ax_imu,ay_imu;
 
 void Base_Control(void *argument){
 
@@ -37,7 +38,7 @@ void Base_Control(void *argument){
 //                Base_target_status.vx = 0;
 //                Base_target_status.vy = 0;
 //            }
-            Base_target_status.vx = 20;
+//            Base_target_status.vx = 20;
 //            Base_target_status.vy = 20;
             Kinematic_Analysis(Base_target_status.vx, Base_target_status.vy, Base_target_status.omega);
         }
@@ -48,7 +49,33 @@ void Base_Control(void *argument){
         vTaskDelay(20);
     }
 }
+/*
+  * @brief 里程计任务
+  * @author 3YouRan
+  * @date 25-5-16 下午5:02
+  * @params
+  * @return
+ */
+void Odemetry_Task(void *argument){
+    portTickType CurrentTime_PID;
+    while(1){//10ms
+        CurrentTime_PID=xTaskGetTickCount();
+        // 转换IMU加速度到全局坐标系
+        float a_global[2];
+        imu_to_global(ax_imu, ay_imu, yaw_total, &a_global[0], &a_global[1]);
+        // 预测步骤
+        kalman_predict(&kf, a_global);
+        // 更新步骤
+        float z[] = {Base_odometry.x, Base_odometry.y,};
+        kalman_update(&kf, z);
 
+            // 输出结果
+//            printf("Estimated Position: (%.2f, %.2f)\n",
+//                   kf.x[0], kf.x[1]);
+        calculate_odometry(motorA.speed,motorB.speed,motorC.speed,motorD.speed,&Base_odometry,0.005f);
+        vTaskDelayUntil(&CurrentTime_PID,5);
+    }
+ }
 /**************************************************************************
 麦克纳姆轮逆运动学模型
 A B 为前两轮
@@ -79,20 +106,15 @@ void calculate_odometry(float w1, float w2, float w3, float w4,
     // 修正后的速度计算（调整了vy的符号）
     state->vx = inv_mat * ( w1 + w2 + w3 + w4) * r;
     state->vy = inv_mat * (-w1 + w2 + w3 - w4) * r; // 修正此行
-    state->omega = inv_mat * (-w1 + w2 - w3 + w4) * r / (l + w); // 取消注释
+
 
     // 使用state->theta（弧度）进行积分
-    float theta_rad = state->theta; // 假设theta存储的是弧度
-    state->x += (state->vx * cos(theta_rad) - state->vy * sin(theta_rad)) * delta_time;
-    state->y += (state->vx * sin(theta_rad) + state->vy * cos(theta_rad)) * delta_time;
-    state->theta += state->omega * delta_time; // 取消注释
+    float theta_rad = yaw_total/360.0f*2.0f*M_PI; // 假设theta存储的是弧度
+    state->x += (state->vx * cosf(theta_rad) - state->vy * sinf(theta_rad)) * delta_time;
+    state->y += (state->vx * sinf(theta_rad) + state->vy * cosf(theta_rad)) * delta_time;
 
-    // 角度归一化到[-π, π]
-    if (state->theta > M_PI) {
-        state->theta -= 2 * M_PI;
-    } else if (state->theta < -M_PI) {
-        state->theta += 2 * M_PI;
-    }
+
+
 }
 KalmanFilter kf;
 // 矩阵乘法 (结果 = a * b)
@@ -168,17 +190,17 @@ void kalman_init(KalmanFilter* kf, float dt) {
 
     // 过程噪声协方差 Q (示例值)
     float Q[N_STATE][N_STATE] = {
-            {0.2, 0, 0, 0},
-            {0, 0.2, 0, 0},
-            {0, 0, 0.7, 0},
-            {0, 0, 0, 0.7}
+            {0.9, 0, 0.2, 0},
+            {0, 0.9, 0, 0.2},
+            {0.2, 0, 0.9, 0},
+            {0, 0.2, 0, 0.9}
     };
     memcpy(kf->Q, Q, sizeof(Q));
 
     // 观测噪声协方差 R (示例值)
     float R[N_OBS][N_OBS] = {
-            {0.1, 0},
-            {0, 0.1}
+            {0.15, 0.02},   // 考虑X、Y方向的相关性
+            {0.02, 0.15}
     };
     memcpy(kf->R, R, sizeof(R));
 
@@ -207,18 +229,20 @@ void kalman_predict(KalmanFilter* kf, const float* u) {
     }
 
     // 协方差预测: P = F*P*F^T + Q
-    float FP[N_STATE][N_STATE];
-    multiply((float*)FP, (float*)kf->F, N_STATE, N_STATE,
-             (float*)kf->P, N_STATE, N_STATE);
 
-    float FPT[N_STATE][N_STATE];
-    transpose((float*)FPT, (float*)FP, N_STATE, N_STATE);
+    float temp[N_STATE][N_STATE];
+    multiply((float*)temp, (float*)kf->F, N_STATE, N_STATE,
+             (float*)kf->P, N_STATE, N_STATE); // temp = F * P
 
-    multiply((float*)kf->P, (float*)FP, N_STATE, N_STATE,
-             (float*)FPT, N_STATE, N_STATE);
+    float F_T[N_STATE][N_STATE];
+    transpose((float*)F_T, (float*)kf->F, N_STATE, N_STATE); // F^T
 
-    add((float*)kf->P, (float*)kf->P, (float*)kf->Q,
-        N_STATE, N_STATE);
+    float FPF_T[N_STATE][N_STATE];
+    multiply((float*)FPF_T, (float*)temp, N_STATE, N_STATE,
+             (float*)F_T, N_STATE, N_STATE); // FPF_T = F * P * F^T
+
+    add((float*)kf->P, (float*)FPF_T, (float*)kf->Q, N_STATE, N_STATE);
+
 }
 
 // 更新步骤

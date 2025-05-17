@@ -100,20 +100,29 @@ void USART_PID_Adjust(uint8_t Motor_n,uint8_t *Data_buff)
 
         }
         else if(Data_buff[0]=='P' && Data_buff[1]=='G'){//PG vx,vy,angle  !
-            if(sscanf(Data_buff, "PG%f,%f,%f!", &Base_target_status.vx,&Base_target_status.vy, &Base_target_status.theta) == 3){
-                printf("解析结果：%.2f, %.2f, %.2f\n", Base_target_status.vx, Base_target_status.vy, Base_target_status.theta);
+            if(sscanf(Data_buff, "PG%f,%f,%f!", &Base_target_status.vy,&Base_target_status.vx, &Base_target_status.omega) == 3){
+                Base_target_status.vy=-Base_target_status.vy;
+//                printf("解析结果：%.2f, %.2f, %.2f\n", Base_target_status.vx, Base_target_status.vy, Base_target_status.omega);
+                Angle_Enable=0;
             }else{
-                printf("格式错误\n");
+//                printf("格式错误\n");
             }
         }
         else if(Data_buff[0]=='S' && Data_buff[1]=='R'){//SR servo1_angle,servo2_angle !
             if(sscanf(Data_buff, "SR%f,%f!", &servo1_angle,&servo2_angle) == 2){
-                printf("解析结果：%.2f, %.2f\n", servo1_angle, servo2_angle);
+//                printf("解析结果：%.2f, %.2f\n", servo1_angle, servo2_angle);
             }else{
-                printf("格式错误\n");
+//                printf("格式错误\n");
             }
         }
-
+        else if(Data_buff[0]=='A' && Data_buff[1]=='G'){//PG vx,vy,angle  !
+            if(sscanf(Data_buff, "AG%f!", &Base_target_status.theta) == 1){
+//                printf("解析结果：%.2f\n", Base_target_status.vx, Base_target_status.vy, Base_target_status.omega);
+                Angle_Enable=1;
+            }else{
+//                printf("格式错误\n");
+            }
+        }
     }
 //    else if(Motor_n == 0) // 右边电机
 //    {

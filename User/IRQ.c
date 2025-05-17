@@ -11,7 +11,6 @@ uint8_t UART_num = 0;
 // UART接收完成回调函数
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
-
     if (huart->Instance == USART2) {
         UART_num=2;
         RxLine++;                            // 接收行数加1
@@ -23,6 +22,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
                 printf("UART DataBuff[%d] = %c\r\n",i,DataBuff[i]);
             USART_PID_Adjust(1,DataBuff);             // 调整USART PID
 
+
             memset(DataBuff,0,sizeof(DataBuff));   // 清空接收缓冲区
             RxLine=0;                           // 接收行数清零
         }
@@ -30,41 +30,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 
         HAL_UART_Receive_IT(&huart2, (uint8_t *)RxBuffer, 1);   // 重新启动UART接收中断
     }
-    if (huart->Instance == USART3) {
-        UART_num=3;
-        RxLine_UP++;                            // 接收行数加1
-        DataBuff_UP[RxLine_UP-1]=RxBuffer_UP[0];       // 将接收到的数据存入缓冲区
-        if(RxBuffer_UP[0]=='!')                  // 判断是否接收到感叹号
-        {
-            printf("RXLen_UP=%d\r\n",RxLine_UP);
-            for(int i=0;i<RxLine_UP;i++)
-                printf("UART DataBuff_UP[%d] = %c\r\n",i,DataBuff_UP[i]);
-            USART_PID_Adjust(1,DataBuff_UP);             // 调整USART PID
 
-
-            memset(DataBuff_UP,0,sizeof(DataBuff_UP));   // 清空接收缓冲区
-            RxLine_UP=0;                           // 接收行数清零
-        }
-        RxBuffer_UP[0]=0;                        // 重置接收缓冲区
-
-        HAL_UART_Receive_IT(&huart3, (uint8_t *)RxBuffer_UP, 1);   // 重新启动UART接收中断
-    }
-    if (huart == &huart6) {
-        // 处理接收到的数据
-
-        if (FifoSize > Uart.UartFifo.Cnt)
-        {
-            Uart.UartFifo.RxBuf[Uart.UartFifo.In] = rx_byte;
-            if(++Uart.UartFifo.In >= FifoSize)
-            {
-                Uart.UartFifo.In = 0;
-            }
-            ++Uart.UartFifo.Cnt;
-        }
-
-        // 重新启用接收中断，以便继续接收数??
-        HAL_UART_Receive_IT(&huart6, &rx_byte, 1);
-    }
 }
 
 uint8_t debugRvAll[DEBUG_RV_MXSIZE] = {0};
@@ -73,6 +39,8 @@ void Set_Target_UartInit()
     //  数据接收
     __HAL_UART_ENABLE_IT(&huart6, UART_IT_IDLE);//使能串口6的空闲中断,用于串口接收
     HAL_UART_Receive_DMA(&huart6, (uint8_t*)&debugRvAll, DEBUG_RV_MXSIZE);//开启串口的DMA接收，debugRvAll存储串口接受的第一手数据
+    __HAL_UART_ENABLE_IT(&huart3, UART_IT_IDLE);//使能串口6的空闲中断,用于串口接收
+    HAL_UART_Receive_DMA(&huart3, (uint8_t*)&DataBuff_UP, 200);//开启串口的DMA接收，debugRvAll存储串口接受的第一手数据
 
 }
 
@@ -85,11 +53,21 @@ void DMA_UartIrqHandler(UART_HandleTypeDef *huart)
         {
             __HAL_UART_CLEAR_IDLEFLAG(huart);//清楚空闲中断标志，防止会一直不断进入中断
 
-            DMA_UartIdleCallback(huart);//调用中断处理函数
+            DMA_Imu600_UartIdleCallback(huart);//调用中断处理函数
 
         }
     }
+    if(huart->Instance == huart3.Instance)//判断是否是串口2
+    {
 
+        if(RESET != __HAL_UART_GET_FLAG(huart, UART_FLAG_IDLE))//判断是否是空闲中断
+        {
+            __HAL_UART_CLEAR_IDLEFLAG(huart);//清楚空闲中断标志，防止会一直不断进入中断
+
+            DMA_UP_UartIdleCallback(huart);//调用中断处理函数
+
+        }
+    }
 }
 void imu600_parse(uint8_t *buf){
     U16 ctl;
@@ -107,10 +85,12 @@ void imu600_parse(uint8_t *buf){
         L =7; // 从第7字节开始根据 订阅标识tag来解析剩下的数据
         if ((ctl & 0x0001) != 0)
         {// 加速度xyz 去掉了重力 使用时需*scaleAccel m/s
-            tmpX = (S16)(((S16)buf[L+1]<<8) | buf[L]) * scaleAccel; L += 2; Dbp("\taX: %.3f\r\n", tmpX); // x加速度aX
-            tmpY = (S16)(((S16)buf[L+1]<<8) | buf[L]) * scaleAccel; L += 2; Dbp("\taY: %.3f\r\n", tmpY); // y加速度aY
-            tmpZ = (S16)(((S16)buf[L+1]<<8) | buf[L]) * scaleAccel; L += 2; Dbp("\taZ: %.3f\r\n", tmpZ); // z加速度aZ
-            tmpAbs = sqrt(pow2(tmpX) + pow2(tmpY) + pow2(tmpZ)); Dbp("\ta_abs: %.3f\r\n", tmpAbs); // 3轴合成的绝对值
+            tmpX = (S16)(((S16)buf[L+1]<<8) | buf[L]) * scaleAccel; L += 2;// Dbp("\taX: %.3f\r\n", tmpX); // x加速度aX
+            tmpY = (S16)(((S16)buf[L+1]<<8) | buf[L]) * scaleAccel; L += 2;// Dbp("\taY: %.3f\r\n", tmpY); // y加速度aY
+            tmpZ = (S16)(((S16)buf[L+1]<<8) | buf[L]) * scaleAccel; L += 2; //Dbp("\taZ: %.3f\r\n", tmpZ); // z加速度aZ
+            tmpAbs = sqrt(pow2(tmpX) + pow2(tmpY) + pow2(tmpZ)); //Dbp("\ta_abs: %.3f\r\n", tmpAbs); // 3轴合成的绝对值
+            ax_imu=tmpX;
+            ay_imu=tmpY;
         }
         if ((ctl & 0x0002) != 0)
         {// 加速度xyz 包含了重力 使用时需*scaleAccel m/s
@@ -166,7 +146,7 @@ void imu600_parse(uint8_t *buf){
             }else{
                 yaw_total+=yaw-yaw_last;
             }
-            usart_printf("%.2f,%.2f,%.2f!",tmpX,tmpY,tmpZ);
+//            usart_printf("%.2f,%.2f,%.2f!",tmpX,tmpY,tmpZ);
         }
         if ((ctl & 0x0080) != 0)
         {// xyz 空间位移 单位mm 转为 m
@@ -185,10 +165,12 @@ void imu600_parse(uint8_t *buf){
         }
         if ((ctl & 0x0200) != 0)
         {// 加速度xyz 去掉了重力 使用时需*scaleAccel m/s
-            tmpX = (S16)(((S16)buf[L+1]<<8) | buf[L]) * scaleAccel; L += 2; Dbp("\tasX: %.3f\r\n", tmpX); // x加速度asX
-            tmpY = (S16)(((S16)buf[L+1]<<8) | buf[L]) * scaleAccel; L += 2; Dbp("\tasY: %.3f\r\n", tmpY); // y加速度asY
-            tmpZ = (S16)(((S16)buf[L+1]<<8) | buf[L]) * scaleAccel; L += 2; Dbp("\tasZ: %.3f\r\n", tmpZ); // z加速度asZ
-            tmpAbs = sqrt(pow2(tmpX) + pow2(tmpY) + pow2(tmpZ)); Dbp("\tas_abs: %.3f\r\n", tmpAbs); // 3轴合成的绝对值
+            tmpX = (S16)(((S16)buf[L+1]<<8) | buf[L]) * scaleAccel; L += 2; //Dbp("\tasX: %.3f\r\n", tmpX); // x加速度asX
+            tmpY = (S16)(((S16)buf[L+1]<<8) | buf[L]) * scaleAccel; L += 2; //Dbp("\tasY: %.3f\r\n", tmpY); // y加速度asY
+            tmpZ = (S16)(((S16)buf[L+1]<<8) | buf[L]) * scaleAccel; L += 2; //Dbp("\tasZ: %.3f\r\n", tmpZ); // z加速度asZ
+            tmpAbs = sqrt(pow2(tmpX) + pow2(tmpY) + pow2(tmpZ)); //Dbp("\tas_abs: %.3f\r\n", tmpAbs); // 3轴合成的绝对值
+
+
         }
         if ((ctl & 0x0400) != 0)
         {// ADC的值
@@ -202,7 +184,7 @@ void imu600_parse(uint8_t *buf){
     }
 }
 
-void DMA_UartIdleCallback(UART_HandleTypeDef *huart)//注意一个问题，调用的时候再写&huart6，否则在这个函数里会出问题
+void DMA_Imu600_UartIdleCallback(UART_HandleTypeDef *huart)//注意一个问题，调用的时候再写&huart6，否则在这个函数里会出问题
 {
     HAL_UART_DMAStop(huart);//停止本次DMA传输
 
@@ -215,6 +197,21 @@ void DMA_UartIdleCallback(UART_HandleTypeDef *huart)//注意一个问题，调用的时候再
     memset(&debugRvAll,0,data_length); //清零接收缓冲区
 
     HAL_UART_Receive_DMA(huart, (uint8_t*)&debugRvAll, DEBUG_RV_MXSIZE);//循环中开启串口的DMA接收
+
+}
+void DMA_UP_UartIdleCallback(UART_HandleTypeDef *huart)//注意一个问题，调用的时候再写&huart6，否则在这个函数里会出问题
+{
+    HAL_UART_DMAStop(huart);//停止本次DMA传输
+
+    //计算接收到的数据长度，接收到的数据长度等于数组的最大存储长度减去DMA空闲的数据区长度
+    uint8_t data_length  = DEBUG_RV_MXSIZE - __HAL_DMA_GET_COUNTER(huart->hdmarx);
+
+    //将接收到的数据存入数组
+//    printf("UART6:%x,%x,%x,%x,%x\r\n",debugRvAll[0],debugRvAll[1],debugRvAll[2],debugRvAll[3],debugRvAll[4]);
+    USART_PID_Adjust(1,DataBuff_UP);
+    memset(&DataBuff_UP,0,data_length); //清零接收缓冲区
+
+    HAL_UART_Receive_DMA(&huart3, (uint8_t *)DataBuff_UP, 200);   // 启动UART接收中断
 
 }
 
@@ -260,23 +257,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
         motorB.speed=-(float )encoder_now2/(4*28*500)*500*60; //rpm
         motorC.speed=(float )encoder_now3/(4*28*500)*500*60;
         motorD.speed=-(float )encoder_now4/(4*30*500)*500*60;
-//        if(times1==5){//10ms
-//            // 转换IMU加速度到全局坐标系
-//            float a_global[2];
-//            imu_to_global(stcAcc.a[0]/32768*16*G, stcAcc.a[1]/32768*16*G, yaw_total, &a_global[0], &a_global[1]);
-//
-//            // 预测步骤
-//            kalman_predict(&kf, a_global);
-//
-//            // 更新步骤
-//            float z[] = {Base_odometry.x, Base_odometry.y,};
-//            kalman_update(&kf, z);
-//
-//            // 输出结果
-////            printf("Estimated Position: (%.2f, %.2f)\n",
-////                   kf.x[0], kf.x[1]);
-//            calculate_odometry(motorA.speed,motorB.speed,motorC.speed,motorD.speed,&Base_odometry,0.01f);
-//        }
+
         if(times1==10){//20ms
             times1=0;
 
@@ -335,15 +316,15 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 #define TX_BUF_SIZE 512
 uint8_t send_buf[TX_BUF_SIZE];
 
-void usart_printf(const char* format, ...)
-{
-    va_list args;
-    uint32_t length;
-    va_start(args, format);
-
-    length = vsnprintf((char*)send_buf, TX_BUF_SIZE, (const char*)format, args);
-
-    va_end(args);
-
-    HAL_UART_Transmit_DMA(&huart3, (uint8_t*)send_buf, length);
-}
+//void usart_printf(const char* format, ...)
+//{
+//    va_list args;
+//    uint32_t length;
+//    va_start(args, format);
+//
+//    length = vsnprintf((char*)send_buf, TX_BUF_SIZE, (const char*)format, args);
+//
+//    va_end(args);
+//
+//    HAL_UART_Transmit_DMA(&huart3, (uint8_t*)send_buf, length);
+//}

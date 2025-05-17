@@ -57,7 +57,7 @@ void Kinematic_Analysis(float Vx,float Vy,float V_angle);
 void calculate_odometry(float w1, float w2, float w3, float w4,
                         OdometryState_t * state, float delta_time);
 void Base_Control(void *argument);
-
+void Odemetry_Task(void *argument);
 
 void kalman_init(KalmanFilter* kf, float dt);
 void kalman_predict(KalmanFilter* kf, const float* u);

@@ -58,7 +58,7 @@ TaskHandle_t g_xIM600TaskHandle; //������������
 TaskHandle_t g_xPIDTaskHandle; //������������
 TaskHandle_t g_xOLEDTaskHandle; //������������
 TaskHandle_t g_xPAN_tileTaskHandle; //������������
-
+TaskHandle_t g_xOdemetryTaskHandle; //������������
 
 QueueHandle_t g_xPS2QueueHandle; //PS2�ֱ����о��
 
@@ -116,7 +116,7 @@ void MX_FREERTOS_Init(void) {
 
   /* Create the thread(s) */
   /* creation of defaultTask */
-  defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
+//  defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -125,10 +125,10 @@ void MX_FREERTOS_Init(void) {
   xTaskCreate(Base_Control,"Base_Control",256,NULL,osPriorityNormal,&g_xBaseControlTaskHandle);
 //  xTaskCreate(PS2_Task,"PS2_Task",128,NULL,osPriorityNormal,&g_xPS2TaskHandle);
 //  xTaskCreate(IMU_Task, "IMU_Task", 512, NULL, osPriorityNormal+2, &g_xIM600TaskHandle);
-  xTaskCreate(PID_Task,"PID_Task",512,NULL,osPriorityNormal+3,&g_xPIDTaskHandle);
+  xTaskCreate(PID_Task,"PID_Task",256,NULL,osPriorityNormal+3,&g_xPIDTaskHandle);
   xTaskCreate(OLED_Task,"OLED_Task",256,NULL,osPriorityNormal-1,&g_xOLEDTaskHandle);
-  xTaskCreate(pan_tile_task,"PAN_tile_Task",256,NULL,osPriorityNormal,&g_xPAN_tileTaskHandle);
-
+  xTaskCreate(pan_tile_task,"PAN_tile_Task",128,NULL,osPriorityNormal,&g_xPAN_tileTaskHandle);
+  xTaskCreate(Odemetry_Task,"Odemetry_Task",256,NULL,osPriorityNormal+4,&g_xOdemetryTaskHandle);
     //  xTimerStart(g_xTimerPIDHandle,0);
   /* USER CODE END RTOS_THREADS */
 

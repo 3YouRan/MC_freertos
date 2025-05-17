@@ -4,6 +4,7 @@
     <file url="file://$PROJECT_DIR$/Application/base_task.c" charset="GBK" />
     <file url="file://$PROJECT_DIR$/Application/imu_task.c" charset="GBK" />
     <file url="file://$PROJECT_DIR$/Application/oled_task.c" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/Application/pid_task.c" charset="GBK" />
     <file url="file://$PROJECT_DIR$/BSP/mpu6050.h" charset="GBK" />
     <file url="file://$PROJECT_DIR$/Core/Src/stm32f4xx_it.c" charset="GBK" />
     <file url="file://$PROJECT_DIR$/User/IRQ.c" charset="GBK" />

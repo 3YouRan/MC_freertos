@@ -26,7 +26,7 @@ void IMU_Task(void *argument){
 
             Cmd_GetPkt(rxByte); //每收??1字节数据都填入该函数，当抓取到有效的数据包就会回调进?? Cmd_RxUnpack(U8 *buf, U8 DLen) 函数处理
         }
-        vTaskDelay(1);
+        vTaskDelay(3);
 
     }
 }

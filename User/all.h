@@ -127,11 +127,13 @@ extern Base_status_t Base_target_status;
 extern OdometryState_t Base_odometry;
 extern uint8_t UART_num;
 extern KalmanFilter kf;
+extern uint8_t Angle_Enable;
+extern float ax_imu,ay_imu;
 ////IRQ.c，Init.c中函数的声明
 void my_init();
 void Set_Target_UartInit();
 void DMA_UartIrqHandler(UART_HandleTypeDef *huart);
-void DMA_UartIdleCallback(UART_HandleTypeDef *huart);//注意一个问题，调用的时候再写&huart6，否则在这个函数里会出问题
-void usart_printf(const char* format, ...);
+void DMA_Imu600_UartIdleCallback(UART_HandleTypeDef *huart);//注意一个问题，调用的时候再写&huart6，否则在这个函数里会出问题
+void DMA_UP_UartIdleCallback(UART_HandleTypeDef *huart);//注意一个问题，调用的时候再写&huart6，否则在这个函数里会出问题
 
 #endif //MC_PROJ_ALL_H

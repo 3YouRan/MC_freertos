@@ -7,7 +7,7 @@
 uint8_t Motor_Enable = 1;
 uint16_t pid_delay = 0;
 uint8_t pid_flag = 0;
-
+uint8_t Angle_Enable = 0;
 
 void PID_Task(void *argument){
     portTickType CurrentTime_PID;
@@ -25,7 +25,9 @@ void PID_Task(void *argument){
             INC_PID_Realize(&pid_speed_C, motorC.TargetSpeed, motorC.speed);
             INC_PID_Realize(&pid_speed_D, motorD.TargetSpeed, motorD.speed);
             //角度环
-            Base_target_status.omega= FULL_PID_Realize(&pid_angle, Base_target_status.theta, yaw_total);
+            if(Angle_Enable==1) {
+                Base_target_status.omega = FULL_PID_Realize(&pid_angle, Base_target_status.theta, yaw_total);
+            }
         }
         //判断电机使能
 
