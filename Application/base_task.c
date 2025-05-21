@@ -10,7 +10,8 @@ uint8_t mode_flag = SLAVE_MODE;
 uint8_t delay_times = 0;
 uint8_t delay_flag = 0;
 float ax_imu,ay_imu;
-
+uint8_t back_x_flag=0;
+uint8_t back_y_flag=0;
 void Base_Control(void *argument){
 
     while(1){
@@ -25,24 +26,25 @@ void Base_Control(void *argument){
             delay_times = 0;
         }
         if(mode_flag==RC_MODE&&delay_flag==1) {//遥控模式，遥控器控制
-//            //速度控制
-//            if((L_TICK[1]+L_TICK[0])>500){//未连接遥控器时，默认停止
-//                Base_target_status.vx = 0;
-//                Base_target_status.vy = 0;
-//
-//            }else if(abs((L_TICK[0]-128)+(L_TICK[1]-128))>20){
-////                Base_target_status.vx = (L_TICK[0] - 128) * 5;
-////                Base_target_status.vy = (L_TICK[1] - 128) * 5;
-//
-//            }else {
-//                Base_target_status.vx = 0;
-//                Base_target_status.vy = 0;
-//            }
-//            Base_target_status.vx = 20;
-//            Base_target_status.vy = 20;
             Kinematic_Analysis(Base_target_status.vx, Base_target_status.vy, Base_target_status.omega);
         }
-        else if(mode_flag==SLAVE_MODE&&delay_flag==1) {//slave模式，上位机串口控制
+        else if(mode_flag==SLAVE_MODE &&delay_flag==1 && back_x_flag == 0&&back_y_flag==0) {//slave模式，上位机串口控制
+            Kinematic_Analysis(Base_target_status.vx, Base_target_status.vy, Base_target_status.omega);
+        }else if(back_x_flag==1&&back_y_flag==0){
+            Base_target_status.vy= - FULL_PID_Realize(&pid_pos,0,Base_odometry.y)* cosf(yaw_total/360*2*M_PI);
+            if(fabsf(Base_odometry.y)<5){
+                back_x_flag=0;
+                back_y_flag=1;
+            }
+            Kinematic_Analysis(Base_target_status.vx, Base_target_status.vy, Base_target_status.omega);
+        }else if(back_x_flag==0&&back_y_flag==1){
+            Base_target_status.vx=  FULL_PID_Realize(&pid_pos,0,Base_odometry.x)* cosf(yaw_total/360*2*M_PI);
+            if(fabsf(Base_odometry.x)<5){
+                back_x_flag=0;
+                back_y_flag=0;
+                Base_target_status.vx=0;
+                Base_target_status.vy=0;
+            }
             Kinematic_Analysis(Base_target_status.vx, Base_target_status.vy, Base_target_status.omega);
         }
 
@@ -76,6 +78,19 @@ void Odemetry_Task(void *argument){
         vTaskDelayUntil(&CurrentTime_PID,5);
     }
  }
+ /**
+   * @brief
+   * @author 3YouRan
+   * @date 25-5-20 下午8:01
+   * @params
+   * @return
+  */
+
+void Back_Task(void *arg){
+      printf("111\r\n");
+
+
+  }
 /**************************************************************************
 麦克纳姆轮逆运动学模型
 A B 为前两轮
@@ -83,14 +98,14 @@ C D 为后两轮
 **************************************************************************/
 void Kinematic_Analysis(float Vx,float Vy,float V_angle)
 {
-    float Vx_robot= Vx*cos(yaw_total/360*2*M_PI) - Vy*sin(yaw_total/360*2*M_PI);
-    float Vy_robot= Vx*sin(yaw_total/360*2*M_PI) + Vy*cos(yaw_total/360*2*M_PI);
-    float V_angle_robot= V_angle;
+//    float Vx_robot= Vx*cos(yaw_total/360*2*M_PI) - Vy*sin(yaw_total/360*2*M_PI);
+//    float Vy_robot= Vx*sin(yaw_total/360*2*M_PI) + Vy*cos(yaw_total/360*2*M_PI);
+//    float V_angle_robot= V_angle;
 
-    motorA.TargetSpeed=(Vx_robot-Vy_robot-V_angle_robot*RxPLUSRy);//左前
-    motorB.TargetSpeed=(Vx_robot+Vy_robot+V_angle_robot*RxPLUSRy);//右前
-    motorC.TargetSpeed=(Vx_robot+Vy_robot-V_angle_robot*RxPLUSRy);//左后
-    motorD.TargetSpeed=(Vx_robot-Vy_robot+V_angle_robot*RxPLUSRy);//右后
+    motorA.TargetSpeed=(Vx-Vy-V_angle*RxPLUSRy);//左前
+    motorB.TargetSpeed=(Vx+Vy+V_angle*RxPLUSRy);//右前
+    motorC.TargetSpeed=(Vx+Vy-V_angle*RxPLUSRy);//左后
+    motorD.TargetSpeed=(Vx-Vy+V_angle*RxPLUSRy);//右后
 }
 
 void calculate_odometry(float w1, float w2, float w3, float w4,
@@ -111,7 +126,7 @@ void calculate_odometry(float w1, float w2, float w3, float w4,
     // 使用state->theta（弧度）进行积分
     float theta_rad = yaw_total/360.0f*2.0f*M_PI; // 假设theta存储的是弧度
     state->x += (state->vx * cosf(theta_rad) - state->vy * sinf(theta_rad)) * delta_time;
-    state->y += (state->vx * sinf(theta_rad) + state->vy * cosf(theta_rad)) * delta_time;
+    state->y += -(state->vx * sinf(theta_rad) + state->vy * cosf(theta_rad)) * delta_time;
 
 
 

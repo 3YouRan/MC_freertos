@@ -16,6 +16,8 @@ PID pid_speed_D;
 
 PID pid_angle;
 
+PID pid_pos;
+
 void PID_Init(){
     pid_speed_A.err = 0;
     pid_speed_A.integral = 0;
@@ -71,6 +73,17 @@ void PID_Init(){
     pid_angle.ki = 0;
     pid_angle.kd = 0;
     pid_angle.deadZone = 0.2f;
+
+    pid_pos.err = 0;
+    pid_pos.integral = 0;
+    pid_pos.maxIntegral = 5000;
+    pid_pos.maxOutput=100;
+    pid_pos.lastErr = 0;
+    pid_pos.output = 0;
+    pid_pos.kp = 5;
+    pid_pos.ki = 0;
+    pid_pos.kd = 0;
+    pid_pos.deadZone = 0.2f;
 }
 /****************************************
  * 作用：增量式PID

@@ -81,8 +81,8 @@ void Error_Handler(void);
 #define PWMD1_GPIO_Port GPIOE
 #define PWMD2_Pin GPIO_PIN_14
 #define PWMD2_GPIO_Port GPIOE
-#define R1_Pin GPIO_PIN_14
-#define R1_GPIO_Port GPIOB
+#define SERVO_F_Pin GPIO_PIN_14
+#define SERVO_F_GPIO_Port GPIOB
 #define L1_Pin GPIO_PIN_15
 #define L1_GPIO_Port GPIOB
 #define DC_Pin GPIO_PIN_11

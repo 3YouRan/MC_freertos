@@ -59,8 +59,8 @@ TaskHandle_t g_xPIDTaskHandle; //������������
 TaskHandle_t g_xOLEDTaskHandle; //������������
 TaskHandle_t g_xPAN_tileTaskHandle; //������������
 TaskHandle_t g_xOdemetryTaskHandle; //������������
-
-QueueHandle_t g_xPS2QueueHandle; //PS2�ֱ����о��
+TaskHandle_t g_xBUZZERTaskHandle; //������������
+TaskHandle_t g_xBackTaskHandle; //������������
 
 //�����ʱ�����
 TimerHandle_t g_xTimerPIDHandle;
@@ -129,6 +129,9 @@ void MX_FREERTOS_Init(void) {
   xTaskCreate(OLED_Task,"OLED_Task",256,NULL,osPriorityNormal-1,&g_xOLEDTaskHandle);
   xTaskCreate(pan_tile_task,"PAN_tile_Task",128,NULL,osPriorityNormal,&g_xPAN_tileTaskHandle);
   xTaskCreate(Odemetry_Task,"Odemetry_Task",256,NULL,osPriorityNormal+4,&g_xOdemetryTaskHandle);
+  xTaskCreate(BUZZER_Task,"BUZZER_Task",64,NULL,osPriorityNormal-1,&g_xBUZZERTaskHandle);
+  xTaskCreate(BUZZER_Task,"BUZZER_Task",64,NULL,osPriorityNormal-1,&g_xBUZZERTaskHandle);
+//    xTaskCreate(Back_Task,"Back_Task",256,NULL,osPriorityNormal+4,&g_xBackTaskHandle);
     //  xTimerStart(g_xTimerPIDHandle,0);
   /* USER CODE END RTOS_THREADS */
 

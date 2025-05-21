@@ -43,6 +43,7 @@
 #include "HWT906.h"
 #include <stdlib.h>
 #include "filter.h"
+#include "Buzzer_Task.h"
 
 ////宏定义
 #define RXSIZE 200
@@ -129,6 +130,11 @@ extern uint8_t UART_num;
 extern KalmanFilter kf;
 extern uint8_t Angle_Enable;
 extern float ax_imu,ay_imu;
+extern uint8_t hit_flag;
+extern uint8_t Buzzer_Flag ;
+extern PID pid_pos;
+extern uint8_t back_x_flag;
+extern uint8_t back_y_flag;
 ////IRQ.c，Init.c中函数的声明
 void my_init();
 void Set_Target_UartInit();

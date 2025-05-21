@@ -7,7 +7,7 @@ void my_init() {
     //电源电压ADC采样初始化
     HAL_ADC_Start_DMA(&hadc1, (uint32_t*)ADC_Value, 1);
     //PS2手柄初始化
-    PS2_SetInit();
+//    PS2_SetInit();
     //定时器中断初始化
     HAL_TIM_Base_Start_IT(&htim6);
 //    HAL_TIM_Base_Start_IT(&htim12);
@@ -23,6 +23,7 @@ void my_init() {
     //舵机控制PWM初始化
     HAL_TIM_PWM_Start(&htim8,TIM_CHANNEL_3);
     HAL_TIM_PWM_Start(&htim8,TIM_CHANNEL_4);
+    HAL_TIM_PWM_Start(&htim12,TIM_CHANNEL_1);
     //串口重定向初始化
     RetargetInit(&huart2);
     //UART接收中断初始化

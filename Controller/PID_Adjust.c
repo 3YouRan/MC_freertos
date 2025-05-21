@@ -99,11 +99,10 @@ void USART_PID_Adjust(uint8_t Motor_n,uint8_t *Data_buff)
             }
 
         }
-        else if(Data_buff[0]=='P' && Data_buff[1]=='G'){//PG vx,vy,angle  !
+        else if(Data_buff[0]=='P' && Data_buff[1]=='G'){//上位机速度控制，角速度的设置在Angle_Enable==1时无效
             if(sscanf(Data_buff, "PG%f,%f,%f!", &Base_target_status.vy,&Base_target_status.vx, &Base_target_status.omega) == 3){
                 Base_target_status.vy=-Base_target_status.vy;
 //                printf("解析结果：%.2f, %.2f, %.2f\n", Base_target_status.vx, Base_target_status.vy, Base_target_status.omega);
-                Angle_Enable=0;
             }else{
 //                printf("格式错误\n");
             }
@@ -115,13 +114,39 @@ void USART_PID_Adjust(uint8_t Motor_n,uint8_t *Data_buff)
 //                printf("格式错误\n");
             }
         }
-        else if(Data_buff[0]=='A' && Data_buff[1]=='G'){//PG vx,vy,angle  !
-            if(sscanf(Data_buff, "AG%f!", &Base_target_status.theta) == 1){
-//                printf("解析结果：%.2f\n", Base_target_status.vx, Base_target_status.vy, Base_target_status.omega);
+        else if(Data_buff[0]=='A' && Data_buff[1]=='G'){//设置角度并开启角度环
+            if(sscanf(Data_buff, "AG%f!", &Base_target_status.theta) == 1){//                printf("解析结果：%.2f\n", Base_target_status.vx, Base_target_status.vy, Base_target_status.omega);
                 Angle_Enable=1;
             }else{
 //                printf("格式错误\n");
             }
+        }
+        else if(Data_buff[0]=='Z' && Data_buff[1]=='E'&&Data_buff[2]=='R'&&Data_buff[3]=='O'){//PG vx,vy,angle  !
+            Cmd_05();// 归零IM600Z轴姿态角数据，以小车复位时的姿???角为角??0??
+            yaw_total=0;
+            yaw=0;
+            yaw_last=0;
+            printf("IM600Z轴姿态角数据归零成功\r\n");
+        }
+        else if(Data_buff[0]=='B' && Data_buff[1]=='U'&&Data_buff[2]=='Z'&&Data_buff[3]=='Z'&&Data_buff[4]=='1'){//PG vx,vy,angle  !
+            Buzzer_Flag=BUZZER_STOP;
+            Base_odometry.x=0;
+            Base_odometry.y=0;
+            printf("达到停车线，蜂鸣器鸣一次\r\n");
+        }
+        else if(Data_buff[0]=='B' && Data_buff[1]=='U'&&Data_buff[2]=='Z'&&Data_buff[3]=='Z'&&Data_buff[4]=='2'){//PG vx,vy,angle  !
+            Buzzer_Flag=BUZZER_FOUND;
+            printf("找到目标，蜂鸣器鸣5次\r\n");
+        }
+        else if(Data_buff[0]=='H' && Data_buff[1]=='I'&&Data_buff[2]=='T'){//PG vx,vy,angle  !
+            hit_flag=1;
+            printf("击球!!!\r\n");
+        }
+        else if(Data_buff[0]=='B' && Data_buff[1]=='A'&&Data_buff[2]=='C'&&Data_buff[3]=='K'){//PG vx,vy,angle  !
+            back_x_flag=1;
+        }
+        else if(Data_buff[0]=='N' && Data_buff[1]=='O'&&Data_buff[2]=='A'&&Data_buff[3]=='G'){//取消角度环
+            Angle_Enable=0;
         }
     }
 //    else if(Motor_n == 0) // 右边电机
