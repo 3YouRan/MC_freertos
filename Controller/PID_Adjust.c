@@ -1,6 +1,3 @@
-
-
-
 #include "all.h"
 extern uint8_t RxBuffer[1];//串口接收缓冲
 extern uint8_t Databuff[200];//指令内容
@@ -115,7 +112,8 @@ void USART_PID_Adjust(uint8_t Motor_n,uint8_t *Data_buff)
             }
         }
         else if(Data_buff[0]=='A' && Data_buff[1]=='G'){//设置角度并开启角度环
-            if(sscanf(Data_buff, "AG%f!", &Base_target_status.theta) == 1){//                printf("解析结果：%.2f\n", Base_target_status.vx, Base_target_status.vy, Base_target_status.omega);
+            if(sscanf(Data_buff, "AG%f!", &Base_target_status.theta) == 1){
+                // printf("解析结果：%.2f\n", Base_target_status.vx, Base_target_status.vy, Base_target_status.omega);
                 Angle_Enable=1;
             }else{
 //                printf("格式错误\n");

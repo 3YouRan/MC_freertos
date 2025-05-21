@@ -2,7 +2,7 @@
 // Created by 陈瑜 on 25-3-22.
 //
 #include "all.h"
-
+#include "debug.h"
 Base_status_t Base_target_status;//底盘目标状态
 OdometryState_t Base_odometry;//底盘里程计
 
@@ -42,8 +42,10 @@ void Base_Control(void *argument){
             if(fabsf(Base_odometry.x)<5){
                 back_x_flag=0;
                 back_y_flag=0;
+//                usart_printf("%d\n\r",666);
                 Base_target_status.vx=0;
                 Base_target_status.vy=0;
+
             }
             Kinematic_Analysis(Base_target_status.vx, Base_target_status.vy, Base_target_status.omega);
         }
