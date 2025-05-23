@@ -124,6 +124,7 @@ void USART_PID_Adjust(uint8_t Motor_n,uint8_t *Data_buff)
             yaw_total=0;
             yaw=0;
             yaw_last=0;
+            Base_target_status.theta=0;
             printf("IM600Z轴姿态角数据归零成功\r\n");
         }
         else if(Data_buff[0]=='B' && Data_buff[1]=='U'&&Data_buff[2]=='Z'&&Data_buff[3]=='Z'&&Data_buff[4]=='1'){//PG vx,vy,angle  !

@@ -2,7 +2,7 @@
 // Created by 陈瑜 on 25-3-22.
 //
 #include "all.h"
-#include "debug.h"
+
 Base_status_t Base_target_status;//底盘目标状态
 OdometryState_t Base_odometry;//底盘里程计
 
@@ -31,7 +31,9 @@ void Base_Control(void *argument){
         else if(mode_flag==SLAVE_MODE &&delay_flag==1 && back_x_flag == 0&&back_y_flag==0) {//slave模式，上位机串口控制
             Kinematic_Analysis(Base_target_status.vx, Base_target_status.vy, Base_target_status.omega);
         }else if(back_x_flag==1&&back_y_flag==0){
+
             Base_target_status.vy= - FULL_PID_Realize(&pid_pos,0,Base_odometry.y)* cosf(yaw_total/360*2*M_PI);
+
             if(fabsf(Base_odometry.y)<5){
                 back_x_flag=0;
                 back_y_flag=1;
@@ -45,6 +47,10 @@ void Base_Control(void *argument){
 //                usart_printf("%d\n\r",666);
                 Base_target_status.vx=0;
                 Base_target_status.vy=0;
+                HAL_UART_Transmit(&huart3,(uint8_t*)"ARRIVE!",7,1000);
+//                HAL_UART_Transmit(&huart3,(uint8_t*)"ARRIVE!",7,1000);
+//                HAL_UART_Transmit(&huart3,(uint8_t*)"ARRIVE!",7,1000);
+
 
             }
             Kinematic_Analysis(Base_target_status.vx, Base_target_status.vy, Base_target_status.omega);
@@ -80,19 +86,7 @@ void Odemetry_Task(void *argument){
         vTaskDelayUntil(&CurrentTime_PID,5);
     }
  }
- /**
-   * @brief
-   * @author 3YouRan
-   * @date 25-5-20 下午8:01
-   * @params
-   * @return
-  */
 
-void Back_Task(void *arg){
-      printf("111\r\n");
-
-
-  }
 /**************************************************************************
 麦克纳姆轮逆运动学模型
 A B 为前两轮

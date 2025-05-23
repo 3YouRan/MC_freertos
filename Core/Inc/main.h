@@ -57,6 +57,10 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define AIN21_Pin GPIO_PIN_3
+#define AIN21_GPIO_Port GPIOE
+#define AIN22_Pin GPIO_PIN_4
+#define AIN22_GPIO_Port GPIOE
 #define PWMB1_Pin GPIO_PIN_5
 #define PWMB1_GPIO_Port GPIOE
 #define PWMB2_Pin GPIO_PIN_6
@@ -73,6 +77,12 @@ void Error_Handler(void);
 #define E4A_GPIO_Port GPIOA
 #define E4B_Pin GPIO_PIN_1
 #define E4B_GPIO_Port GPIOA
+#define AIN31_Pin GPIO_PIN_4
+#define AIN31_GPIO_Port GPIOC
+#define AIN34_Pin GPIO_PIN_5
+#define AIN34_GPIO_Port GPIOC
+#define AIN41_Pin GPIO_PIN_2
+#define AIN41_GPIO_Port GPIOB
 #define PWMC1_Pin GPIO_PIN_9
 #define PWMC1_GPIO_Port GPIOE
 #define PWMC2_Pin GPIO_PIN_11
@@ -81,10 +91,6 @@ void Error_Handler(void);
 #define PWMD1_GPIO_Port GPIOE
 #define PWMD2_Pin GPIO_PIN_14
 #define PWMD2_GPIO_Port GPIOE
-#define SERVO_F_Pin GPIO_PIN_14
-#define SERVO_F_GPIO_Port GPIOB
-#define L1_Pin GPIO_PIN_15
-#define L1_GPIO_Port GPIOB
 #define DC_Pin GPIO_PIN_11
 #define DC_GPIO_Port GPIOD
 #define RES_Pin GPIO_PIN_12
@@ -101,12 +107,10 @@ void Error_Handler(void);
 #define SERVO1_GPIO_Port GPIOC
 #define BUZZER_Pin GPIO_PIN_8
 #define BUZZER_GPIO_Port GPIOA
-#define LED_Pin GPIO_PIN_12
-#define LED_GPIO_Port GPIOA
 #define E1A_Pin GPIO_PIN_15
 #define E1A_GPIO_Port GPIOA
-#define LED_R_Pin GPIO_PIN_11
-#define LED_R_GPIO_Port GPIOC
+#define LED_Pin GPIO_PIN_11
+#define LED_GPIO_Port GPIOC
 #define L2_Pin GPIO_PIN_12
 #define L2_GPIO_Port GPIOC
 #define R2_Pin GPIO_PIN_2
@@ -127,6 +131,10 @@ void Error_Handler(void);
 #define PWMA1_GPIO_Port GPIOB
 #define PWMA2_Pin GPIO_PIN_9
 #define PWMA2_GPIO_Port GPIOB
+#define AIN11_Pin GPIO_PIN_0
+#define AIN11_GPIO_Port GPIOE
+#define AIN12_Pin GPIO_PIN_1
+#define AIN12_GPIO_Port GPIOE
 
 /* USER CODE BEGIN Private defines */
 

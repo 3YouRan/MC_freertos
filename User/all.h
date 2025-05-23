@@ -141,5 +141,5 @@ void Set_Target_UartInit();
 void DMA_UartIrqHandler(UART_HandleTypeDef *huart);
 void DMA_Imu600_UartIdleCallback(UART_HandleTypeDef *huart);//注意一个问题，调用的时候再写&huart6，否则在这个函数里会出问题
 void DMA_UP_UartIdleCallback(UART_HandleTypeDef *huart);//注意一个问题，调用的时候再写&huart6，否则在这个函数里会出问题
-
+void usart_printf(const char* format, ...);
 #endif //MC_PROJ_ALL_H

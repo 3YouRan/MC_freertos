@@ -23,7 +23,7 @@ void my_init() {
     //舵机控制PWM初始化
     HAL_TIM_PWM_Start(&htim8,TIM_CHANNEL_3);
     HAL_TIM_PWM_Start(&htim8,TIM_CHANNEL_4);
-    HAL_TIM_PWM_Start(&htim12,TIM_CHANNEL_1);
+    HAL_TIM_PWM_Start(&htim12,TIM_CHANNEL_2);
     //串口重定向初始化
     RetargetInit(&huart2);
     //UART接收中断初始化

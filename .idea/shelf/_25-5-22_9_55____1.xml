@@ -1,0 +1,39 @@
+<changelist name="在进行更新之前于_25-5-22_上午9_55_取消提交了更改_[更改]1" date="1747878953970" recycled="true" deleted="true">
+  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/在进行更新之前于_25-5-22_上午9_55_取消提交了更改_[更改]1/shelved.patch" />
+  <option name="DESCRIPTION" value="在进行更新之前于 25-5-22 上午9:55 取消提交了更改 [更改]" />
+  <binary>
+    <option name="BEFORE_PATH" value="cmake-build-debug/CMakeFiles/MC_Proj.elf.dir/Controller/PID_Adjust.c.obj" />
+    <option name="AFTER_PATH" value="cmake-build-debug/CMakeFiles/MC_Proj.elf.dir/Controller/PID_Adjust.c.obj" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/在进行更新之前于_25-5-22_上午9_55_取消提交了更改_[更改]1/PID_Adjust.c.obj" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="cmake-build-debug/MC_Proj.elf" />
+    <option name="AFTER_PATH" value="cmake-build-debug/MC_Proj.elf" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/在进行更新之前于_25-5-22_上午9_55_取消提交了更改_[更改]1/MC_Proj.elf" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="cmake-build-debug/.ninja_deps" />
+    <option name="AFTER_PATH" value="cmake-build-debug/.ninja_deps" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/在进行更新之前于_25-5-22_上午9_55_取消提交了更改_[更改]1/.ninja_deps" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="cmake-build-debug/CMakeFiles/MC_Proj.elf.dir/Application/pan_tile_task.c.obj" />
+    <option name="AFTER_PATH" value="cmake-build-debug/CMakeFiles/MC_Proj.elf.dir/Application/pan_tile_task.c.obj" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/在进行更新之前于_25-5-22_上午9_55_取消提交了更改_[更改]1/pan_tile_task.c.obj" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="cmake-build-debug/MC_Proj.bin" />
+    <option name="AFTER_PATH" value="cmake-build-debug/MC_Proj.bin" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/在进行更新之前于_25-5-22_上午9_55_取消提交了更改_[更改]1/MC_Proj.bin" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="cmake-build-debug/CMakeFiles/MC_Proj.elf.dir/Application/Buzzer_Task.c.obj" />
+    <option name="AFTER_PATH" value="cmake-build-debug/CMakeFiles/MC_Proj.elf.dir/Application/Buzzer_Task.c.obj" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/在进行更新之前于_25-5-22_上午9_55_取消提交了更改_[更改]1/Buzzer_Task.c.obj" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="cmake-build-debug/CMakeFiles/MC_Proj.elf.dir/Core/Src/main.c.obj" />
+    <option name="AFTER_PATH" value="cmake-build-debug/CMakeFiles/MC_Proj.elf.dir/Core/Src/main.c.obj" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/在进行更新之前于_25-5-22_上午9_55_取消提交了更改_[更改]1/main.c.obj" />
+  </binary>
+</changelist>

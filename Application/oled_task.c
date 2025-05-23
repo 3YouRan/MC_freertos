@@ -20,7 +20,7 @@ void OLED_Task(void *arg){
     float voltage;
     while(1){
         //¸¡µãÊý×ª×Ö·û´®
-        voltage=ADC_Value[0]/4096.0*5*11;
+        voltage=ADC_Value[0]/100.0;
 
         float_to_str(voltage,Voltage_str,2);
         float_to_str(yaw_total,yaw_str,2);

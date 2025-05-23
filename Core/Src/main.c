@@ -140,8 +140,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-      printf("Hello World\n\r");
-      HAL_Delay(100);
+//      SERVO3_SET(100000)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -206,6 +205,7 @@ void SystemClock_Config(void)
   * @param  htim : TIM handle
   * @retval None
   */
+
 
 /**
   * @brief  This function is executed in case of error occurrence.
