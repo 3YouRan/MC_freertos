@@ -23,7 +23,7 @@ void OLED_Task(void *arg){
         voltage=ADC_Value[0]/100.0;
 
         float_to_str(voltage,Voltage_str,2);
-        float_to_str(yaw_total,yaw_str,2);
+
         //重置数值显示区
         OLED_ShowString(65,0,Space);
         OLED_ShowString(32,16,Space);
@@ -32,21 +32,10 @@ void OLED_Task(void *arg){
         OLED_ShowString(0,0,"Voltage:");//显示电池电压
         OLED_ShowString(65,0,Voltage_str);
 
-        OLED_ShowString(0,16,"Yaw:");//显示电机A速度
-        OLED_ShowString(32,16,yaw_str);
-
-        OLED_ShowString(0,32,"Motor:");//显示电机状态
-        if(Motor_Enable==1){
-            OLED_ShowString(48,32,"ON");
-        }else{
-            OLED_ShowString(48,32,"OFF");
-        }
-        //显示收到了哪个串口的指令
-        OLED_ShowString(0,48,"UART:");
-        OLED_ShowNumber(48,48,UART_num,1,12);
 
         OLED_Refresh_Gram();//刷新
-        vTaskDelay(200);//延时
+        HAL_ADC_Start_DMA(&hadc1, (uint32_t*)ADC_Value, 1);
+        vTaskDelay(500);//延时
     }
 }
 void float_to_str(float num, char *str, int precision) {

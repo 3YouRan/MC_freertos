@@ -45,7 +45,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN Variables */
-extern motor motorA, motorB, motorC, motorD;
+
 extern PID pid_speed_A;
 extern float Target_Speed;
 extern float Target_Position;
@@ -122,15 +122,8 @@ void MX_FREERTOS_Init(void) {
   /* add threads, ... */
   //底层任务
   xTaskCreate(UART6_Task,"UART6_Task",128,NULL,osPriorityNormal-1,&g_xUart6TaskHandle);
-  xTaskCreate(Base_Control,"Base_Control",256,NULL,osPriorityNormal,&g_xBaseControlTaskHandle);
-//  xTaskCreate(PS2_Task,"PS2_Task",128,NULL,osPriorityNormal,&g_xPS2TaskHandle);
-//  xTaskCreate(IMU_Task, "IMU_Task", 512, NULL, osPriorityNormal+2, &g_xIM600TaskHandle);
-  xTaskCreate(PID_Task,"PID_Task",256,NULL,osPriorityNormal+3,&g_xPIDTaskHandle);
   xTaskCreate(OLED_Task,"OLED_Task",256,NULL,osPriorityNormal-1,&g_xOLEDTaskHandle);
-  xTaskCreate(pan_tile_task,"PAN_tile_Task",128,NULL,osPriorityNormal,&g_xPAN_tileTaskHandle);
-  xTaskCreate(Odemetry_Task,"Odemetry_Task",256,NULL,osPriorityNormal+4,&g_xOdemetryTaskHandle);
-  xTaskCreate(BUZZER_Task,"BUZZER_Task",64,NULL,osPriorityNormal-1,&g_xBUZZERTaskHandle);
-  xTaskCreate(BUZZER_Task,"BUZZER_Task",64,NULL,osPriorityNormal-1,&g_xBUZZERTaskHandle);
+  xTaskCreate(pan_tile_task,"PAN_tile_Task",256,NULL,osPriorityNormal,&g_xPAN_tileTaskHandle);
 //    xTaskCreate(Back_Task,"Back_Task",256,NULL,osPriorityNormal+4,&g_xBackTaskHandle);
     //  xTimerStart(g_xTimerPIDHandle,0);
   /* USER CODE END RTOS_THREADS */

@@ -5,11 +5,12 @@
 #ifndef MC_PROJ_ALL_H
 #define MC_PROJ_ALL_H
 //// 头文件包含
+#include "adc.h"
 #include <stdarg.h>
 #include <stdio.h>
 #include "stdlib.h"
 #include "main.h"
-#include "base_task.h"
+#include "tim.h"
 #include "FreeRTOS.h"
 #include "task.h"
 #include "semphr.h"
@@ -19,31 +20,27 @@
 #include "retarget.h"
 #include "PID_Adjust.h"
 #include "PID_Control.h"
-#include "driver_motor.h"
-#include "Buzzer.h"
-#include "im948_CMD.h"
-#include "PS2.h"
-#include "base_task.h"
+
+
 #include "usart.h"
-#include "bsp_usart.h"
+
 #include "string.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "pid_task.h"
+
 #include "uart_task.h"
-#include "imu_task.h"
-#include "PS2.h"
+
 #include "oled.h"
-#include "adc.h"
+
 #include "oled_task.h"
-#include "mpu6050.h"
+
 #include "i2c.h"
 #include "servo.h"
 #include "pan_tile_task.h"
-#include "HWT906.h"
+
 #include <stdlib.h>
 #include "filter.h"
-#include "Buzzer_Task.h"
+
 
 ////宏定义
 #define RXSIZE 200
@@ -51,7 +48,6 @@
 #define DEBUG_RV_MXSIZE 255
 //// 全局变量声明
 
-extern motor motorA, motorB, motorC, motorD;
 extern TaskHandle_t g_xUart6TaskHandle;
 
 extern PID pid_speed_A;
@@ -81,11 +77,7 @@ extern uint8_t RxBuffer_UP[1];
 extern uint8_t DataBuff_UP[200];
 //陀螺仪数据
 
-//陀螺仪数据
-extern U8 Data[9];
-extern U16 MASK[16];
-extern U16 Handkey;
-extern struct_Ram_Uart Uart;
+
 
 extern float Target_Angle;
 extern PID pid_angle;
@@ -124,10 +116,9 @@ extern LowPassFilter filter_yaw;
 
 extern float servo1_angle;
 extern float servo2_angle;
-extern Base_status_t Base_target_status;
-extern OdometryState_t Base_odometry;
+
 extern uint8_t UART_num;
-extern KalmanFilter kf;
+
 extern uint8_t Angle_Enable;
 extern float ax_imu,ay_imu;
 extern uint8_t hit_flag;
@@ -135,6 +126,14 @@ extern uint8_t Buzzer_Flag ;
 extern PID pid_pos;
 extern uint8_t back_x_flag;
 extern uint8_t back_y_flag;
+
+
+extern int16_t Pulse_num1;
+extern int16_t Pulse_num2;
+extern uint8_t motor_rotate_flag;
+extern float motor_angle1;
+extern float motor_angle2;
+extern uint8_t shoot_flag;
 ////IRQ.c，Init.c中函数的声明
 void my_init();
 void Set_Target_UartInit();

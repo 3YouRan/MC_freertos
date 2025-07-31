@@ -69,84 +69,23 @@ float Get_Data(uint8_t* Data_Usart)
 void USART_PID_Adjust(uint8_t Motor_n,uint8_t *Data_buff)
 {
     float data_Get = Get_Data(Data_buff); // 存放接收到的数据
-//    printf("data=%.2f\r\n",data_Get);
+    // printf("data=%.2f\r\n",data_Get);
     if(Motor_n == 1)//左边电机
     {
-        if(Data_buff[0]=='P' && Data_buff[1]=='1') // 位置环P
-            pid_angle.kp = data_Get;
-        else if(Data_buff[0]=='I' && Data_buff[1]=='1') // 位置环I
-            pid_angle.ki = data_Get;
-        else if(Data_buff[0]=='D' && Data_buff[1]=='1') // 位置环D
-            pid_angle.kd = data_Get;
-        else if(Data_buff[0]=='P' && Data_buff[1]=='2') // 速度环P
-            pid_speed_A.kp = data_Get;
-        else if(Data_buff[0]=='I' && Data_buff[1]=='2') // 速度环I
-            pid_speed_A.ki = data_Get;
-        else if(Data_buff[0]=='D' && Data_buff[1]=='2') // 速度环D
-            pid_speed_A.kd = data_Get;
-        else if((Data_buff[0]=='S' && Data_buff[1]=='p') && Data_buff[2]=='e') //目标速度
-            servo2_angle = data_Get;
-        else if((Data_buff[0]=='P' && Data_buff[1]=='o') && Data_buff[2]=='s') //目标位置
-            servo1_angle = data_Get;
-        else if(Data_buff[0]=='R' && Data_buff[1]=='C'){
-            if (sscanf(Data_buff, "RC=%d,%d", &L_TICK[0], &L_TICK[1]) == 2) {
-                printf("解析结果：%d 和 %d\n", L_TICK[0], L_TICK[1]);
-            } else {
-                printf("格式错误\n");
-            }
+        if(Data_buff[0]=='A' && Data_buff[1]=='G') {//AG+20.22,-20.22!
 
-        }
-        else if(Data_buff[0]=='P' && Data_buff[1]=='G'){//上位机速度控制，角速度的设置在Angle_Enable==1时无效
-            if(sscanf(Data_buff, "PG%f,%f,%f!", &Base_target_status.vy,&Base_target_status.vx, &Base_target_status.omega) == 3){
-                Base_target_status.vy=-Base_target_status.vy;
-//                printf("解析结果：%.2f, %.2f, %.2f\n", Base_target_status.vx, Base_target_status.vy, Base_target_status.omega);
-            }else{
-//                printf("格式错误\n");
+            motor_rotate_flag=1;
+            if (sscanf((char *)Data_buff, "AG%f,%f!", &motor_angle1, &motor_angle2) == 2) {
+                motor_rotate_flag = 1;  // 解析成功才启动电机
+            } else {
+                printf("Invalid format!\r\n");  // 格式错误提示
             }
         }
-        else if(Data_buff[0]=='S' && Data_buff[1]=='R'){//SR servo1_angle,servo2_angle !
-            if(sscanf(Data_buff, "SR%f,%f!", &servo1_angle,&servo2_angle) == 2){
-//                printf("解析结果：%.2f, %.2f\n", servo1_angle, servo2_angle);
-            }else{
-//                printf("格式错误\n");
-            }
+        if(Data_buff[0]=='S' && Data_buff[1]=='H'&& Data_buff[2]=='O'&& Data_buff[3]=='O'&& Data_buff[4]=='T') {//AG+20.22,-20.22!
+
+            shoot_flag=1;
         }
-        else if(Data_buff[0]=='A' && Data_buff[1]=='G'){//设置角度并开启角度环
-            if(sscanf(Data_buff, "AG%f!", &Base_target_status.theta) == 1){
-                // printf("解析结果：%.2f\n", Base_target_status.vx, Base_target_status.vy, Base_target_status.omega);
-                Angle_Enable=1;
-            }else{
-//                printf("格式错误\n");
-            }
-        }
-        else if(Data_buff[0]=='Z' && Data_buff[1]=='E'&&Data_buff[2]=='R'&&Data_buff[3]=='O'){//PG vx,vy,angle  !
-            Cmd_05();// 归零IM600Z轴姿态角数据，以小车复位时的姿???角为角??0??
-            yaw_total=0;
-            yaw=0;
-            yaw_last=0;
-            Base_target_status.theta=0;
-            printf("IM600Z轴姿态角数据归零成功\r\n");
-        }
-        else if(Data_buff[0]=='B' && Data_buff[1]=='U'&&Data_buff[2]=='Z'&&Data_buff[3]=='Z'&&Data_buff[4]=='1'){//PG vx,vy,angle  !
-            Buzzer_Flag=BUZZER_STOP;
-            Base_odometry.x=0;
-            Base_odometry.y=0;
-            printf("达到停车线，蜂鸣器鸣一次\r\n");
-        }
-        else if(Data_buff[0]=='B' && Data_buff[1]=='U'&&Data_buff[2]=='Z'&&Data_buff[3]=='Z'&&Data_buff[4]=='2'){//PG vx,vy,angle  !
-            Buzzer_Flag=BUZZER_FOUND;
-            printf("找到目标，蜂鸣器鸣5次\r\n");
-        }
-        else if(Data_buff[0]=='H' && Data_buff[1]=='I'&&Data_buff[2]=='T'){//PG vx,vy,angle  !
-            hit_flag=1;
-            printf("击球!!!\r\n");
-        }
-        else if(Data_buff[0]=='B' && Data_buff[1]=='A'&&Data_buff[2]=='C'&&Data_buff[3]=='K'){//PG vx,vy,angle  !
-            back_x_flag=1;
-        }
-        else if(Data_buff[0]=='N' && Data_buff[1]=='O'&&Data_buff[2]=='A'&&Data_buff[3]=='G'){//取消角度环
-            Angle_Enable=0;
-        }
+
     }
 //    else if(Motor_n == 0) // 右边电机
 //    {
