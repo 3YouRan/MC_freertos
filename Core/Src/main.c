@@ -113,6 +113,7 @@ int main(void)
   MX_ADC1_Init();
   MX_TIM8_Init();
   MX_TIM12_Init();
+  MX_UART4_Init();
   /* USER CODE BEGIN 2 */
   my_init();
 
@@ -196,6 +197,7 @@ void SystemClock_Config(void)
   * @param  htim : TIM handle
   * @retval None
   */
+
 
 /**
   * @brief  This function is executed in case of error occurrence.

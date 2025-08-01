@@ -123,7 +123,7 @@ void MX_FREERTOS_Init(void) {
   //底层任务
   xTaskCreate(UART6_Task,"UART6_Task",128,NULL,osPriorityNormal-1,&g_xUart6TaskHandle);
   xTaskCreate(OLED_Task,"OLED_Task",256,NULL,osPriorityNormal-1,&g_xOLEDTaskHandle);
-  xTaskCreate(pan_tile_task,"PAN_tile_Task",256,NULL,osPriorityNormal,&g_xPAN_tileTaskHandle);
+  xTaskCreate(pan_tile_task,"PAN_tile_Task",1024,NULL,osPriorityNormal+5,&g_xPAN_tileTaskHandle);
 //    xTaskCreate(Back_Task,"Back_Task",256,NULL,osPriorityNormal+4,&g_xBackTaskHandle);
     //  xTimerStart(g_xTimerPIDHandle,0);
   /* USER CODE END RTOS_THREADS */

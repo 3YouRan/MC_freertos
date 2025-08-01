@@ -12,12 +12,12 @@ uint8_t UART_num = 0;
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
     if (huart->Instance == USART2) {
-        UART_num=2;
+        // UART_num=2;
         RxLine++;                            // ½ÓÊÕĞĞÊı¼Ó1
         DataBuff[RxLine-1]=RxBuffer[0];       // ½«½ÓÊÕµ½µÄÊı¾İ´æÈë»º³åÇø
         if(RxBuffer[0]=='!')                  // ÅĞ¶ÏÊÇ·ñ½ÓÊÕµ½¸ĞÌ¾ºÅ
         {
-            // printf("RXLen=%d\r\n",RxLine);
+            printf("RXLen=%d\r\n",RxLine);
             // for(int i=0;i<RxLine;i++)
             //     printf("UART DataBuff[%d] = %c\r\n",i,DataBuff[i]);
             USART_PID_Adjust(1,DataBuff);             // µ÷ÕûUSART PID
@@ -83,7 +83,7 @@ void DMA_UP_UartIdleCallback(UART_HandleTypeDef *huart)//×¢ÒâÒ»¸öÎÊÌâ£¬µ÷ÓÃµÄÊ±º
     uint8_t data_length  = DEBUG_RV_MXSIZE - __HAL_DMA_GET_COUNTER(huart->hdmarx);
 
     //½«½ÓÊÕµ½µÄÊı¾İ´æÈëÊı×é
-//    printf("UART6:%x,%x,%x,%x,%x\r\n",debugRvAll[0],debugRvAll[1],debugRvAll[2],debugRvAll[3],debugRvAll[4]);
+    // printf("UART3");
     USART_PID_Adjust(1,DataBuff_UP);
     memset(&DataBuff_UP,0,data_length); //ÇåÁã½ÓÊÕ»º³åÇø
     HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);

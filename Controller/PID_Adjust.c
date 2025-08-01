@@ -74,7 +74,7 @@ void USART_PID_Adjust(uint8_t Motor_n,uint8_t *Data_buff)
     {
         if(Data_buff[0]=='A' && Data_buff[1]=='G') {//AG+20.22,-20.22!
 
-            motor_rotate_flag=1;
+            // motor_rotate_flag=1;
             if (sscanf((char *)Data_buff, "AG%f,%f!", &motor_angle1, &motor_angle2) == 2) {
                 motor_rotate_flag = 1;  // 解析成功才启动电机
             } else {

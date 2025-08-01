@@ -72,6 +72,6 @@ void pan_tile_task(void *arg) {
             HAL_GPIO_WritePin(LASER_GPIO_Port, LASER_Pin, GPIO_PIN_RESET);
             shoot_flag=0;
         }
-        vTaskDelay(10);
+        vTaskDelay(5);
     }
 }
